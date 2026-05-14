@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trapp Consultoria — Dossiê Executivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0c1c3a;--navy2:#152848;--navy3:#1e3a60;
+  --gold:#c4933a;--gold2:#ddb96a;--gold3:#f0dba8;
+  --cream:#f8f5f0;--white:#ffffff;
+  --ink:#0c1225;--soft:#3d4f6e;--muted:#7a8ba8;
+  --line:#ddd8d0;--bg:#f2efe9;
+  --green:#1a6b45;--red:#a32828;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif;font-weight:400;line-height:1.65;overflow-x:hidden}
+
+/* SIDEBAR NAV */
+.sidebar{
+  position:fixed;top:0;left:0;height:100vh;width:240px;
+  background:var(--navy);z-index:200;
+  display:flex;flex-direction:column;
+  padding:0;overflow-y:auto;
+  transition:transform 0.3s ease;
+}
+.sidebar-logo{
+  padding:2rem 1.8rem 1.5rem;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.sidebar-logo .brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:700;
+  color:var(--white);letter-spacing:0.02em;
+  line-height:1.1;
+}
+.sidebar-logo .brand span{color:var(--gold);}
+.sidebar-logo .sub{
+  font-family:'DM Mono',monospace;
+  font-size:0.55rem;color:rgba(255,255,255,0.3);
+  letter-spacing:0.18em;text-transform:uppercase;margin-top:0.4rem;
+}
+.sidebar-doc{
+  padding:1rem 1.8rem;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.sidebar-doc p{
+  font-size:0.65rem;color:rgba(255,255,255,0.25);
+  letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;
+  line-height:1.7;
+}
+.nav-list{padding:1rem 0;flex:1;}
+.nav-item{
+  display:block;padding:0.6rem 1.8rem;
+  text-decoration:none;
+  font-size:0.78rem;color:rgba(255,255,255,0.45);
+  font-weight:400;letter-spacing:0.02em;
+  transition:all 0.2s;border-left:2px solid transparent;
+  display:flex;align-items:center;gap:0.7rem;
+}
+.nav-item:hover,.nav-item.active{
+  color:var(--white);background:rgba(255,255,255,0.05);
+  border-left-color:var(--gold);
+}
+.nav-item .nav-n{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  color:var(--gold);opacity:0.6;min-width:1.2rem;
+}
+.nav-item.active .nav-n{opacity:1;}
+.sidebar-footer{
+  padding:1.5rem 1.8rem;border-top:1px solid rgba(255,255,255,0.07);
+}
+.sidebar-footer p{font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:0.08em;text-transform:uppercase;font-family:'DM Mono',monospace;line-height:1.8;}
+
+/* MAIN CONTENT */
+.main{margin-left:240px;min-height:100vh;}
+
+/* CAPA */
+.capa{
+  background:var(--navy);
+  min-height:100vh;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  padding:4rem 5rem;
+}
+.capa::before{
+  content:'';position:absolute;
+  top:-30%;right:-10%;
+  width:70vw;height:70vw;
+  border-radius:50%;
+  border:1px solid rgba(196,147,58,0.08);
+  pointer-events:none;
+}
+.capa::after{
+  content:'';position:absolute;
+  bottom:-20%;left:-5%;
+  width:40vw;height:40vw;
+  border-radius:50%;
+  border:1px solid rgba(196,147,58,0.05);
+  pointer-events:none;
+}
+.capa-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  position:relative;z-index:1;margin-bottom:auto;
+}
+.capa-doc-id{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  color:rgba(255,255,255,0.2);letter-spacing:0.15em;text-transform:uppercase;
+  line-height:1.8;
+}
+.capa-confidential{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;
+  border:1px solid rgba(196,147,58,0.3);padding:0.3rem 0.8rem;
+}
+.capa-body{
+  position:relative;z-index:1;
+  padding:4rem 0;
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+}
+.capa-eyebrow{
+  font-family:'DM Mono',monospace;font-size:0.65rem;
+  color:var(--gold);letter-spacing:0.25em;text-transform:uppercase;
+  margin-bottom:2rem;display:flex;align-items:center;gap:1rem;
+}
+.capa-eyebrow::before{content:'';width:3rem;height:1px;background:var(--gold);}
+.capa-h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,6vw,6rem);font-weight:600;
+  color:var(--white);line-height:1.0;
+  letter-spacing:-0.01em;margin-bottom:0.3rem;
+}
+.capa-h1 em{color:var(--gold);font-style:italic;}
+.capa-h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,3vw,2.8rem);font-weight:400;
+  color:rgba(255,255,255,0.4);line-height:1.2;
+  margin-bottom:3rem;font-style:italic;
+}
+.capa-line{width:4rem;height:2px;background:var(--gold);margin-bottom:2.5rem;}
+.capa-desc{
+  font-size:1rem;color:rgba(255,255,255,0.55);
+  max-width:520px;font-weight:300;line-height:1.8;
+  margin-bottom:3rem;
+}
+.capa-stats{
+  display:flex;gap:3rem;
+}
+.capa-stat .n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.5rem;font-weight:700;color:var(--gold);line-height:1;
+}
+.capa-stat .l{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase;margin-top:0.3rem;
+}
+.capa-bottom{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  position:relative;z-index:1;
+  border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;
+}
+.capa-bottom p{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:rgba(255,255,255,0.2);letter-spacing:0.1em;text-transform:uppercase;
+}
+
+/* SEÇÕES */
+.secao{padding:5rem 5rem;max-width:100%;}
+.secao.bg-alt{background:var(--bg);}
+.secao.bg-navy{background:var(--navy);}
+.secao.bg-white{background:var(--white);}
+
+.sec-header{display:flex;align-items:flex-start;gap:3rem;margin-bottom:4rem;}
+.sec-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem;font-weight:700;color:var(--gold);
+  opacity:0.15;line-height:1;flex-shrink:0;
+  margin-top:-0.5rem;
+}
+.sec-meta{}
+.sec-kicker{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  color:var(--gold);letter-spacing:0.25em;text-transform:uppercase;
+  margin-bottom:0.8rem;display:flex;align-items:center;gap:0.7rem;
+}
+.sec-kicker::before{content:'';width:1.5rem;height:1px;background:var(--gold);}
+.sec-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:600;
+  color:var(--navy);line-height:1.1;letter-spacing:-0.01em;
+}
+.sec-title em{color:var(--gold);font-style:italic;}
+.sec-title.light{color:var(--white);}
+.sec-subtitle{
+  font-size:1rem;color:var(--soft);font-weight:300;
+  line-height:1.8;margin-top:0.8rem;max-width:560px;
+}
+.sec-subtitle.light{color:rgba(255,255,255,0.55);}
+
+/* CARDS GRID */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.cards-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+.cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+
+.card{background:var(--white);border:1px solid var(--line);padding:2rem;position:relative;}
+.card.navy{background:var(--navy2);border-color:rgba(255,255,255,0.08);}
+.card.gold-top{border-top:3px solid var(--gold);}
+.card.navy-top{border-top:3px solid var(--navy);}
+.card-icon{font-size:1.8rem;margin-bottom:1.2rem;}
+.card-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.5rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:0.5rem;
+}
+.card-label{
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;
+}
+.card.navy .card-label{color:rgba(255,255,255,0.3);}
+.card-title{font-weight:600;font-size:0.95rem;color:var(--navy);margin-bottom:0.5rem;line-height:1.3;}
+.card.navy .card-title{color:var(--white);}
+.card-desc{font-size:0.85rem;color:var(--soft);line-height:1.7;font-weight:300;}
+.card.navy .card-desc{color:rgba(255,255,255,0.5);}
+.card-tag{
+  display:inline-block;margin-top:1rem;
+  font-family:'DM Mono',monospace;font-size:0.55rem;
+  padding:0.2rem 0.6rem;border:1px solid var(--line);
+  color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;
+}
+
+/* TIMELINE PROCESSO */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:grid;grid-template-columns:80px 3px 1fr;gap:0 2rem;padding-bottom:3rem;position:relative;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-num-col{display:flex;flex-direction:column;align-items:center;}
+.tl-num{
+  width:80px;height:80px;background:var(--white);border:2px solid var(--navy);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--navy);
+  transition:all 0.25s;
+}
+.tl-item:hover .tl-num{background:var(--navy);color:var(--gold);}
+.tl-line-col{display:flex;justify-content:center;}
+.tl-line{width:1px;flex:1;background:var(--line);margin-top:0;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-body{padding-top:1rem;}
+.tl-kicker{
+  font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;
+}
+.tl-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;
+  color:var(--navy);margin-bottom:0.7rem;
+}
+.tl-desc{font-size:0.88rem;color:var(--soft);line-height:1.75;font-weight:300;margin-bottom:1rem;}
+.tl-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.tl-tag{
+  font-family:'DM Mono',monospace;font-size:0.55rem;padding:0.2rem 0.6rem;
+  border:1px solid var(--line);color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;
+}
+.tl-tag.gold{border-color:var(--gold);color:#8a6010;}
+.tl-tag.navy{border-color:var(--navy);color:var(--navy);}
+
+/* ENTREGÁVEIS */
+.entregavel{
+  border:1px solid var(--line);background:var(--white);
+  padding:2rem;margin-bottom:1px;display:grid;
+  grid-template-columns:auto 1fr auto;gap:2rem;align-items:start;
+}
+.entregavel:hover{border-color:var(--gold);background:#fffef8;}
+.ent-num{
+  font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;
+  color:var(--gold);opacity:0.35;line-height:1;
+}
+.ent-body{}
+.ent-title{font-weight:600;font-size:0.95rem;color:var(--navy);margin-bottom:0.3rem;}
+.ent-desc{font-size:0.83rem;color:var(--soft);line-height:1.65;font-weight:300;}
+.ent-status{
+  font-family:'DM Mono',monospace;font-size:0.55rem;padding:0.25rem 0.7rem;
+  background:#e8f5ee;color:var(--green);letter-spacing:0.08em;text-transform:uppercase;
+  white-space:nowrap;align-self:center;
+}
+.ent-status.obrig{background:#fdecea;color:var(--red);}
+
+/* MODELO FINANCEIRO */
+.financeiro-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+.plano-fin{background:var(--white);padding:2.5rem;}
+.plano-fin.destaque{background:var(--navy);}
+.pf-badge{
+  font-family:'DM Mono',monospace;font-size:0.55rem;
+  background:var(--gold);color:var(--navy);
+  padding:0.2rem 0.6rem;display:inline-block;margin-bottom:1rem;
+  letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
+}
+.pf-nome{
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;
+  color:var(--navy);margin-bottom:0.3rem;
+}
+.plano-fin.destaque .pf-nome{color:var(--white);}
+.pf-porte{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+.plano-fin.destaque .pf-porte{color:rgba(255,255,255,0.3);}
+.pf-preco{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.5rem;font-weight:700;color:var(--gold);
+  line-height:1;margin:1.2rem 0 0.3rem;
+}
+.pf-preco-label{
+  font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem;
+  padding-bottom:1.5rem;border-bottom:1px solid var(--line);
+}
+.plano-fin.destaque .pf-preco-label{color:rgba(255,255,255,0.25);border-bottom-color:rgba(255,255,255,0.1);}
+.pf-items{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
+.pf-items li{font-size:0.83rem;font-weight:300;padding-left:1.2rem;position:relative;color:var(--soft);line-height:1.4;}
+.pf-items li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:0.7rem;}
+.plano-fin.destaque .pf-items li{color:rgba(255,255,255,0.65);}
+.pf-receita{
+  margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--line);
+  font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);
+}
+.plano-fin.destaque .pf-receita{border-top-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);}
+.pf-receita strong{color:var(--green);display:block;font-size:0.75rem;margin-top:0.2rem;}
+.plano-fin.destaque .pf-receita strong{color:var(--gold2);}
+
+/* ESTRUTURA SOCIETÁRIA */
+.estrutura-box{
+  background:var(--white);border:1px solid var(--line);
+  padding:3rem;margin-bottom:2rem;
+}
+.est-row{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.est-label{
+  font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gold);
+  letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.7rem;
+}
+.est-value{
+  font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;
+  color:var(--navy);margin-bottom:0.4rem;
+}
+.est-desc{font-size:0.83rem;color:var(--soft);font-weight:300;line-height:1.6;}
+
+/* DIFERENCIAIS */
+.diff-row{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem;}
+.diff-item{
+  padding:1.8rem;background:var(--white);border:1px solid var(--line);
+  border-left:3px solid var(--navy);transition:border-left-color 0.2s;
+}
+.diff-item:hover{border-left-color:var(--gold);}
+.diff-icon{font-size:1.4rem;margin-bottom:0.8rem;}
+.diff-title{font-weight:600;font-size:0.92rem;color:var(--navy);margin-bottom:0.4rem;}
+.diff-desc{font-size:0.82rem;color:var(--soft);font-weight:300;line-height:1.65;}
+
+/* PROJEÇÃO */
+.proj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:2rem;}
+.proj-cell{background:var(--white);padding:1.8rem;}
+.proj-cell.navy{background:var(--navy);}
+.proj-periodo{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;}
+.proj-cell.navy .proj-periodo{color:rgba(255,255,255,0.3);}
+.proj-valor{
+  font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;
+  color:var(--navy);line-height:1;margin-bottom:0.3rem;
+}
+.proj-cell.navy .proj-valor{color:var(--gold);}
+.proj-desc{font-size:0.75rem;color:var(--muted);font-weight:300;}
+.proj-cell.navy .proj-desc{color:rgba(255,255,255,0.35);}
+
+/* PRÓXIMOS PASSOS */
+.passos{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);}
+.passo{background:var(--white);padding:1.8rem 2.5rem;display:grid;grid-template-columns:3rem 1fr auto;gap:1.5rem;align-items:center;}
+.passo:hover{background:#fffef8;}
+.passo-n{
+  font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;
+  color:var(--gold);opacity:0.5;line-height:1;
+}
+.passo-body{}
+.passo-title{font-weight:600;font-size:0.92rem;color:var(--navy);margin-bottom:0.2rem;}
+.passo-desc{font-size:0.8rem;color:var(--soft);font-weight:300;}
+.passo-prazo{
+  font-family:'DM Mono',monospace;font-size:0.6rem;
+  border:1px solid var(--line);padding:0.3rem 0.7rem;
+  color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;
+  white-space:nowrap;
+}
+
+/* DIVISOR */
+.divider-full{height:1px;background:var(--line);}
+
+/* CITAÇÃO */
+.citacao{
+  border-left:3px solid var(--gold);padding:2rem 3rem;
+  background:var(--white);margin:2rem 0;
+}
+.citacao p{
+  font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-style:italic;
+  color:var(--navy);line-height:1.5;margin-bottom:0.8rem;
+}
+.citacao cite{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+
+/* TABELA */
+.tabela{width:100%;border-collapse:collapse;font-size:0.83rem;}
+.tabela th{
+  text-align:left;padding:0.8rem 1rem;
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;
+  border-bottom:2px solid var(--navy);background:var(--bg);
+}
+.tabela td{padding:0.8rem 1rem;border-bottom:1px solid var(--line);color:var(--soft);font-weight:300;}
+.tabela tr:hover td{background:var(--bg);}
+.tabela td:first-child{color:var(--navy);font-weight:500;}
+.tabela .check{color:var(--green);font-weight:700;}
+.tabela .x{color:var(--muted);}
+
+/* ANIMAÇÃO */
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .sidebar{transform:translateX(-100%);}
+  .main{margin-left:0;}
+  .secao{padding:4rem 2.5rem;}
+  .capa{padding:3rem 2.5rem;}
+  .cards-3,.cards-4{grid-template-columns:1fr 1fr;}
+  .financeiro-grid,.proj-grid{grid-template-columns:1fr;}
+  .diff-row,.est-row{grid-template-columns:1fr;}
+  .timeline .tl-item{grid-template-columns:60px 3px 1fr;}
+}
+@media(max-width:640px){
+  .cards-3,.cards-2,.cards-4{grid-template-columns:1fr;}
+  .capa-stats{flex-wrap:wrap;gap:1.5rem;}
+  .sec-header{flex-direction:column;gap:1rem;}
+  .sec-num{font-size:3rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Trapp <span>Consultoria</span></div>
+    <div class="sub">Dossiê Executivo · 2026</div>
+  </div>
+  <div class="sidebar-doc">
+    <p>
+      Documento Interno<br>
+      Estruturação do Negócio<br>
+      Versão 1.0 · Maio 2026
+    </p>
+  </div>
+  <div class="nav-list">
+    <a href="#capa" class="nav-item active"><span class="nav-n">00</span> Capa</a>
+    <a href="#visao" class="nav-item"><span class="nav-n">01</span> Visão do Negócio</a>
+    <a href="#mercado" class="nav-item"><span class="nav-n">02</span> Mercado e Oportunidade</a>
+    <a href="#empresa" class="nav-item"><span class="nav-n">03</span> Estrutura da Empresa</a>
+    <a href="#servicos" class="nav-item"><span class="nav-n">04</span> Serviços Oferecidos</a>
+    <a href="#processo" class="nav-item"><span class="nav-n">05</span> Processo de Entrega</a>
+    <a href="#entregaveis" class="nav-item"><span class="nav-n">06</span> Entregáveis</a>
+    <a href="#financeiro" class="nav-item"><span class="nav-n">07</span> Modelo Financeiro</a>
+    <a href="#diferencial" class="nav-item"><span class="nav-n">08</span> Diferenciais</a>
+    <a href="#projecao" class="nav-item"><span class="nav-n">09</span> Projeção de Crescimento</a>
+    <a href="#passos" class="nav-item"><span class="nav-n">10</span> Próximos Passos</a>
+  </div>
+  <div class="sidebar-footer">
+    <p>Trapp Consultoria<br>Jaraguá do Sul · SC<br>© 2026</p>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- CAPA -->
+<section class="capa" id="capa">
+  <div class="capa-top">
+    <div class="capa-doc-id">
+      Documento: TC-DOSSIE-2026-01<br>
+      Classificação: Uso Interno<br>
+      Data: Maio / 2026
+    </div>
+    <div class="capa-confidential">Documento Executivo</div>
+  </div>
+
+  <div class="capa-body">
+    <div class="capa-eyebrow">Plano de Estruturação do Negócio</div>
+    <div class="capa-h1">Trapp<br><em>Consultoria</em></div>
+    <div class="capa-h2">NR-1 · Riscos Psicossociais<br>Gestão Ocupacional</div>
+    <div class="capa-line"></div>
+    <p class="capa-desc">
+      Consultoria especializada em Gerenciamento de Riscos Ocupacionais com foco em fatores psicossociais, 
+      atendendo às exigências da nova NR-1 (Portaria MTE nº 1.419/2024). 
+      Este documento estrutura o negócio, os serviços, os processos de entrega e o modelo financeiro.
+    </p>
+    <div class="capa-stats">
+      <div class="capa-stat">
+        <div class="n">+5M</div>
+        <div class="l">Empresas<br>obrigadas</div>
+      </div>
+      <div class="capa-stat">
+        <div class="n">26/05</div>
+        <div class="l">Vigência<br>2026</div>
+      </div>
+      <div class="capa-stat">
+        <div class="n">0</div>
+        <div class="l">Concorrentes<br>especializados</div>
+      </div>
+      <div class="capa-stat">
+        <div class="n">2 anos</div>
+        <div class="l">Ciclo de<br>renovação</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="capa-bottom">
+    <p>Trapp Consultoria · Jaraguá do Sul, SC · 2026</p>
+    <p>Página 1 de 10</p>
+  </div>
+</section>
+
+<!-- 01 VISÃO -->
+<section class="secao bg-white fade-in" id="visao">
+  <div class="sec-header">
+    <div class="sec-num">01</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Visão do Negócio</div>
+      <h2 class="sec-title">O que é a<br><em>Trapp Consultoria</em></h2>
+      <p class="sec-subtitle">Uma empresa criada para resolver um problema urgente e concreto que afeta todas as empresas brasileiras.</p>
+    </div>
+  </div>
+
+  <div class="citacao">
+    <p>"A nova NR-1 criou uma obrigação legal para todas as empresas do Brasil. A Trapp Consultoria existe para transformar essa obrigação em processo simples, documentado e eficiente — protegendo a empresa e melhorando o ambiente de trabalho."</p>
+    <cite>Missão · Trapp Consultoria</cite>
+  </div>
+
+  <div class="cards-3" style="margin-top:3rem;">
+    <div class="card gold-top">
+      <div class="card-icon">🎯</div>
+      <div class="card-label">Missão</div>
+      <div class="card-title">Transformar compliance em cultura</div>
+      <div class="card-desc">Ajudar empresas a cumprir a NR-1 com consistência técnica real — não só documentação, mas processo contínuo e efetivo de prevenção de riscos psicossociais.</div>
+    </div>
+    <div class="card gold-top">
+      <div class="card-icon">🔭</div>
+      <div class="card-label">Visão</div>
+      <div class="card-title">Referência regional em SST psicossocial</div>
+      <div class="card-desc">Ser a consultoria de referência em Santa Catarina para gestão de riscos psicossociais, reconhecida pela qualidade técnica e pela efetividade dos resultados entregues.</div>
+    </div>
+    <div class="card gold-top">
+      <div class="card-icon">⚖️</div>
+      <div class="card-label">Valores</div>
+      <div class="card-title">Rigor técnico com linguagem humana</div>
+      <div class="card-desc">Entregamos processos tecnicamente sólidos com linguagem acessível ao empresário. Sem jargão desnecessário, sem burocracia vazia — só resultado real.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <div class="cards-2">
+      <div class="card">
+        <div class="card-label">Público-alvo primário</div>
+        <div class="card-title" style="font-size:1.1rem;margin-bottom:0.8rem;">PMEs de 5 a 200 funcionários</div>
+        <div class="card-desc">Micro, pequenas e médias empresas de todos os setores em Santa Catarina e região Sul, com foco inicial em Jaraguá do Sul, Joinville, Blumenau e Chapecó. Empresas sem RH estruturado são o alvo principal — são as mais vulneráveis e as que mais precisam de ajuda.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Público-alvo secundário</div>
+        <div class="card-title" style="font-size:1.1rem;margin-bottom:0.8rem;">Empresas de médio e grande porte</div>
+        <div class="card-desc">Empresas com 200+ funcionários que precisam de diagnóstico setorial completo, implantação de programas e monitoramento anual. Ticket maior, contratos mais longos e fidelização natural pelo ciclo bienal de renovação obrigatória.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 02 MERCADO -->
+<section class="secao bg-alt fade-in" id="mercado">
+  <div class="sec-header">
+    <div class="sec-num">02</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Mercado e Oportunidade</div>
+      <h2 class="sec-title">Um mercado de<br><em>bilhões criado por lei</em></h2>
+      <p class="sec-subtitle">A nova NR-1 criou do zero um mercado obrigatório. Todas as empresas precisam — e poucas consultorias estão preparadas para atender.</p>
+    </div>
+  </div>
+
+  <div class="cards-4" style="margin-bottom:3rem;">
+    <div class="card">
+      <div class="card-n">5,4M</div>
+      <div class="card-label">Empresas obrigadas no Brasil</div>
+      <div class="card-desc">Todas as empresas com CNPJ ativo e funcionários precisam cumprir a nova NR-1, independente do porte.</div>
+    </div>
+    <div class="card">
+      <div class="card-n">26/05</div>
+      <div class="card-label">Data de vigência em 2026</div>
+      <div class="card-desc">Após 90 dias orientativos, a fiscalização começa com autuações reais baseadas no art. 201 da CLT.</div>
+    </div>
+    <div class="card">
+      <div class="card-n">2 anos</div>
+      <div class="card-label">Ciclo obrigatório de renovação</div>
+      <div class="card-desc">A NR-1 exige revisão do inventário de riscos a cada dois anos — garantindo receita recorrente para a consultoria.</div>
+    </div>
+    <div class="card">
+      <div class="card-n">~80K</div>
+      <div class="card-label">Empresas só em SC</div>
+      <div class="card-desc">Santa Catarina tem cerca de 80 mil empresas com funcionários registrados — mercado local mais que suficiente para os primeiros anos.</div>
+    </div>
+  </div>
+
+  <div class="cards-2">
+    <div class="card navy-top">
+      <div class="card-label">Problema do mercado</div>
+      <div class="card-title">A maioria das consultorias não está preparada</div>
+      <div class="card-desc" style="margin-top:0.8rem;">
+        As consultorias tradicionais de SST conhecem os riscos físicos e químicos, mas têm pouca expertise em riscos psicossociais. As consultorias de RH e saúde mental não dominam a parte documental e legal. 
+        <br><br>
+        A Trapp une os dois mundos: processo técnico correto + linguagem acessível ao empresário + documentação com validade legal.
+      </div>
+    </div>
+    <div class="card navy-top">
+      <div class="card-label">Vantagem de primeiro movimento</div>
+      <div class="card-title">Entrar agora é capturar o melhor momento</div>
+      <div class="card-desc" style="margin-top:0.8rem;">
+        A lei entrou em vigor em maio de 2026. Empresas que não se adequaram ainda estão correndo. Consultorias que chegam primeiro constroem reputação, conquistam os melhores clientes e criam base de renovação recorrente antes da concorrência se organizar.
+        <br><br>
+        A janela de oportunidade é real — e limitada.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 03 ESTRUTURA -->
+<section class="secao bg-white fade-in" id="empresa">
+  <div class="sec-header">
+    <div class="sec-num">03</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Estrutura da Empresa</div>
+      <h2 class="sec-title">Como a empresa<br><em>será constituída</em></h2>
+      <p class="sec-subtitle">Estrutura jurídica, operacional e de equipe para o lançamento e crescimento da Trapp Consultoria.</p>
+    </div>
+  </div>
+
+  <div class="estrutura-box">
+    <div class="est-row">
+      <div>
+        <div class="est-label">Razão Social</div>
+        <div class="est-value">Trapp Consultoria em SST Ltda.</div>
+        <div class="est-desc">Sociedade Limitada, com CNPJ próprio e objeto social voltado a serviços de consultoria em Segurança e Saúde no Trabalho, gestão de riscos ocupacionais e programas de saúde organizacional.</div>
+      </div>
+      <div>
+        <div class="est-label">Natureza Jurídica</div>
+        <div class="est-value">Sociedade Limitada (LTDA)</div>
+        <div class="est-desc">Empresa independente do Trapp Advogados. Objeto social exclusivamente voltado a consultoria em SST — sem atividade jurídica — em conformidade com as normas da OAB que vedam a mescla de atividades advocatícias com atividades empresariais.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estrutura-box">
+    <div class="est-row">
+      <div>
+        <div class="est-label">Sede</div>
+        <div class="est-value">Jaraguá do Sul · SC</div>
+        <div class="est-desc">Escritório próprio ou compartilhado (coworking) em Jaraguá do Sul, com atuação presencial e remota para toda a região Sul. Possibilidade de expandir para Joinville e Blumenau no segundo ano.</div>
+      </div>
+      <div>
+        <div class="est-label">Regime Tributário</div>
+        <div class="est-value">Simples Nacional ou Lucro Presumido</div>
+        <div class="est-desc">Avaliação pelo contador conforme volume de faturamento. Para o início das operações, Simples Nacional tende a ser mais vantajoso. Revisão anual obrigatória com crescimento do faturamento.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem;">
+    <div class="card-label" style="margin-bottom:1.5rem;">Equipe inicial</div>
+    <div class="cards-3">
+      <div class="card gold-top">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Sócio-fundador / Consultor Sênior</div>
+        <div class="card-desc">Responsável técnico pelo GRO/PGR, relacionamento com clientes, gestão dos projetos e desenvolvimento comercial. Conhecimento em direito do trabalho e SST.</div>
+        <div class="card-tag">Fase 1</div>
+      </div>
+      <div class="card gold-top">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Analista de SST / Especialista em GRO</div>
+        <div class="card-desc">Profissional com conhecimento técnico em Segurança e Saúde no Trabalho, responsável pela aplicação dos instrumentos de diagnóstico, entrevistas, análise dos dados e elaboração dos documentos do GRO. Não precisa ser psicólogo — a NR-1 exige apenas competência técnica adequada.</div>
+        <div class="card-tag">Fase 1–2</div>
+      </div>
+      <div class="card gold-top">
+        <div class="card-icon">👤</div>
+        <div class="card-title">Assistente Administrativo / Comercial</div>
+        <div class="card-desc">Suporte à gestão de contratos, relacionamento com clientes, prospecção ativa e controle de documentação. Pode ser parcial no início.</div>
+        <div class="card-tag">Fase 2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 04 SERVIÇOS -->
+<section class="secao bg-alt fade-in" id="servicos">
+  <div class="sec-header">
+    <div class="sec-num">04</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Escopo e Serviços</div>
+      <h2 class="sec-title">O que a Trapp faz —<br><em>e o que não faz</em></h2>
+      <p class="sec-subtitle">A NR-1 não exige médico, psicólogo, advogado ou técnico de segurança para conduzir o GRO. A empresa define quem tem o conhecimento técnico adequado. A Trapp atua nesse espaço — mas com limites claros que protegem o negócio.</p>
+    </div>
+  </div>
+
+  <!-- EMBASAMENTO LEGAL -->
+  <div class="citacao" style="margin-bottom:3rem;">
+    <p>"A NR-1 e a NR-17 não estabelecem, de forma geral, um profissional específico ou categoria exclusiva para realizar a identificação de perigos e avaliação de riscos ocupacionais. A organização deve designar responsável com conhecimento técnico adequado."</p>
+    <cite>MTE · Q&A Oficial · Pergunta 7 · 30/04/2026</cite>
+  </div>
+
+  <!-- ESCOPO: O QUE FAZ x NÃO FAZ -->
+  <div class="cards-2" style="margin-bottom:3rem;">
+    <div class="card" style="border-top:3px solid var(--green);">
+      <div class="card-label" style="color:var(--green);">✅ O que a Trapp FAZ</div>
+      <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.7rem;">
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Diagnóstico de riscos psicossociais (AEP + GRO)</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Elaboração do Inventário de Riscos</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Formalização dos Critérios do GRO</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Plano de Ação documentado (5W2H)</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Política Anti-Assédio (elaboração e implantação)</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Treinamento de gestores em liderança segura</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Estruturação de canais de escuta e denúncia</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Revisão de jornada, escalas e gestão de metas</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Monitoramento de indicadores de SST</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;"><strong>Indicação de parceiros</strong> especializados quando necessário</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Revisão bienal obrigatória do GRO</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Documentação completa para eSocial e fiscalização</div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--red);">
+      <div class="card-label" style="color:var(--red);">⛔ O que a Trapp NÃO FAZ</div>
+      <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.7rem;">
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Atendimento psicológico individual (atividade privativa do psicólogo — CFP)</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Avaliação clínica de saúde mental dos trabalhadores</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Laudos psicológicos ou psiquiátricos</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Diagnóstico clínico individual de transtornos mentais</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Terapia, aconselhamento psicológico ou psicoterapia</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Perícia médica ou psiquiátrica</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Gestão de afastamentos por doença mental (INSS)</div>
+        <div style="font-size:0.85rem;color:var(--soft);padding-left:1rem;border-left:2px solid var(--line);font-weight:300;line-height:1.5;">Assessoria jurídica trabalhista</div>
+      </div>
+      <div style="margin-top:1.5rem;padding:1rem;background:#fdf2f2;border-left:2px solid var(--red);">
+        <p style="font-size:0.78rem;color:var(--red);font-weight:500;line-height:1.6;">
+          ⚠️ Importante: essas atividades são reguladas por conselhos profissionais específicos (CFP, CFM, OAB). A Trapp identifica quando o cliente precisa desses profissionais e indica parceiros — gerando receita por indicação sem invadir outros escopos.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBASAMENTO ADICIONAL -->
+  <div class="card" style="margin-bottom:3rem;border-left:3px solid var(--gold);background:var(--white);">
+    <div class="card-label">Base legal do escopo da Trapp</div>
+    <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+      <div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--navy);margin-bottom:0.5rem;">NR-1 + MTE Q&A (Pergunta 7)</div>
+        <div style="font-size:0.82rem;color:var(--soft);font-weight:300;line-height:1.7;">Não há exigência de profissional específico. A empresa define o responsável com conhecimento técnico adequado à complexidade dos riscos. A Trapp preenche exatamente esse papel.</div>
+      </div>
+      <div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--navy);margin-bottom:0.5rem;">NR-1 + MTE Q&A (Pergunta 1)</div>
+        <div style="font-size:0.82rem;color:var(--soft);font-weight:300;line-height:1.7;">O objetivo do GRO é identificar perigos, avaliar riscos e adotar medidas de prevenção — não tratar clinicamente os trabalhadores. Esse é o escopo exato da consultoria.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODELO DE PARCERIA COMO RECEITA ADICIONAL -->
+  <div class="card navy" style="margin-bottom:3rem;">
+    <div class="card-label">💡 Modelo de receita adicional — rede de parceiros</div>
+    <div style="margin-top:1rem;">
+      <div style="font-size:0.9rem;font-weight:500;color:var(--white);margin-bottom:0.8rem;">Quando o diagnóstico identificar necessidade de especialistas, a Trapp indica — e monetiza essa indicação</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;">
+        <div style="background:rgba(255,255,255,0.06);padding:1rem;border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:0.7rem;color:var(--gold2);font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Parceiro</div>
+          <div style="font-size:0.85rem;color:var(--white);font-weight:500;margin-bottom:0.3rem;">Psicólogos Organizacionais</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-weight:300;">Para atendimento individual e programas clínicos de saúde mental</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);padding:1rem;border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:0.7rem;color:var(--gold2);font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Parceiro</div>
+          <div style="font-size:0.85rem;color:var(--white);font-weight:500;margin-bottom:0.3rem;">Médicos do Trabalho</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-weight:300;">Para PCMSO, perícias e avaliações clínicas obrigatórias</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);padding:1rem;border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:0.7rem;color:var(--gold2);font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Parceiro</div>
+          <div style="font-size:0.85rem;color:var(--white);font-weight:500;margin-bottom:0.3rem;">Técnicos de Segurança</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);font-weight:300;">Para riscos físicos, químicos e biológicos fora do escopo psicossocial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVIÇOS CORE -->
+  <div class="card-label" style="margin-bottom:1.5rem;">Portfólio de serviços — dentro do escopo NR-1</div>
+
+  <div class="cards-2" style="margin-bottom:1.5rem;">
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <div class="card-label">Serviço Core · Obrigatório</div>
+      <div class="card-title">Diagnóstico NR-1 — GRO Psicossocial</div>
+      <div class="card-desc">Realização da AEP com foco em riscos psicossociais, elaboração do Inventário de Riscos, formalização dos Critérios do GRO e entrega de toda a documentação exigida pelo MTE. Inclui observação in loco, entrevistas e análise documental. <strong>Não exige profissional regulamentado — a NR-1 define apenas "conhecimento técnico adequado".</strong></div>
+      <div class="card-tag gold" style="margin-top:1rem;">Todas as empresas · Base legal: NR-1 + Q&A MTE</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <div class="card-label">Serviço Core · Obrigatório</div>
+      <div class="card-title">Plano de Ação e PGR</div>
+      <div class="card-desc">Elaboração do Plano de Ação com medidas de prevenção organizacionais, responsáveis, prazos e indicadores para cada risco identificado. Integração ao PGR existente. As medidas são de gestão e organização do trabalho — não intervenção clínica individual.</div>
+      <div class="card-tag gold" style="margin-top:1rem;">Todas as empresas · Base legal: NR-1 subitem 1.5.5.2</div>
+    </div>
+  </div>
+
+  <div class="cards-3" style="margin-bottom:1.5rem;">
+    <div class="card">
+      <div class="card-icon">📢</div>
+      <div class="card-label">Medida Preventiva Organizacional</div>
+      <div class="card-title">Política Anti-Assédio</div>
+      <div class="card-desc">Elaboração de política interna, canal de denúncia, treinamento de lideranças e estruturação de comitê de apuração. Ação de gestão organizacional — dentro do escopo da Trapp.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎓</div>
+      <div class="card-label">Medida Preventiva Organizacional</div>
+      <div class="card-title">Treinamento de Lideranças</div>
+      <div class="card-desc">Capacitação de gestores em comunicação não-violenta, feedback construtivo e liderança psicologicamente segura. Treinamento gerencial — não atendimento clínico.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔊</div>
+      <div class="card-label">Medida Preventiva Organizacional</div>
+      <div class="card-title">Canal de Escuta e Comunicação</div>
+      <div class="card-desc">Estruturação de canal de escuta ativa, pesquisa de clima e comunicação transparente. Ferramenta de gestão e evidência de participação dos trabalhadores exigida pelo MTE.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <div class="card-label">Medida Preventiva Organizacional</div>
+      <div class="card-title">Revisão de Jornada e Demandas</div>
+      <div class="card-desc">Análise e recomendação de revisão de escalas, pausas, banco de horas e metas para redução de sobrecarga — fator de risco psicossocial identificado no GRO.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-label">Serviço Recorrente</div>
+      <div class="card-title">Monitoramento de Indicadores</div>
+      <div class="card-desc">Acompanhamento periódico com KPIs de SST: absenteísmo, afastamentos e turnover. Relatórios para diretoria e evidências para a fiscalização do Auditor Fiscal.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <div class="card-label">Serviço Recorrente · Obrigatório por Lei</div>
+      <div class="card-title">Revisão Bienal do GRO</div>
+      <div class="card-desc">Reavaliação obrigatória a cada 2 anos (NR-1 subitem 1.5.4.4.6). Receita recorrente garantida pela própria lei. Atualização do inventário, critérios e plano de ação.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 05 PROCESSO -->
+<section class="secao bg-white fade-in" id="processo">
+  <div class="sec-header">
+    <div class="sec-num">05</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Processo de Entrega</div>
+      <h2 class="sec-title">Como cada projeto<br><em>é executado</em></h2>
+      <p class="sec-subtitle">Metodologia padronizada que garante qualidade, consistência técnica e documentação adequada em todos os projetos.</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">01</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 1</div>
+        <div class="tl-title">Onboarding e Planejamento</div>
+        <div class="tl-desc">Reunião inicial com o cliente para coleta de informações sobre porte, setor, regime de trabalho (presencial/remoto/híbrido), histórico de SST e estrutura organizacional. Definição das unidades de avaliação — função, setor ou grupo similar de exposição. Assinatura de contrato e definição do cronograma.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Reunião de kickoff</span>
+          <span class="tl-tag">Coleta de dados</span>
+          <span class="tl-tag">Cronograma</span>
+          <span class="tl-tag">Contrato</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">02</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 1–2</div>
+        <div class="tl-title">AEP — Avaliação Ergonômica Preliminar</div>
+        <div class="tl-desc">Visita presencial ao ambiente de trabalho para observação das condições e organização do trabalho. Análise da atividade por setor e função. Diálogo direto com trabalhadores e gestores. Para equipes em home office, adaptação da metodologia com entrevistas remotas e autoavaliações estruturadas.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">AEP · NR-17</span>
+          <span class="tl-tag">Visita in loco</span>
+          <span class="tl-tag navy">Obrigatória</span>
+          <span class="tl-tag">Home office incluso</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">03</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 2</div>
+        <div class="tl-title">Aplicação dos Instrumentos de Diagnóstico</div>
+        <div class="tl-desc">Aplicação de questionários estruturados (baseados nos modelos COPSOQ/HSE adaptados à NR-1), entrevistas individuais e/ou grupos focais conforme o porte e a estrutura da empresa. Todos os dados são coletados de forma anônima e por setor. Os resultados são analisados tecnicamente — não entregues de forma isolada.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Questionários validados</span>
+          <span class="tl-tag">Dados anônimos</span>
+          <span class="tl-tag">Entrevistas</span>
+          <span class="tl-tag">Por setor</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">04</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 2–3</div>
+        <div class="tl-title">Análise Técnica e Inventário de Riscos</div>
+        <div class="tl-desc">Consolidação de todos os dados na elaboração do Inventário de Riscos Ocupacionais com foco nos fatores psicossociais. Classificação por nível de risco (baixo, médio, alto, crítico) por setor e função. Formalização dos Critérios do GRO adotados. Toda a análise técnica documentada e integrada à AEP.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Inventário de Riscos</span>
+          <span class="tl-tag navy">Documento legal</span>
+          <span class="tl-tag">Critérios GRO</span>
+          <span class="tl-tag">Matriz de riscos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">05</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 3</div>
+        <div class="tl-title">Plano de Ação e Programas Corretivos</div>
+        <div class="tl-desc">Para cada risco identificado: medida de prevenção, responsável, prazo e forma de acompanhamento. Seleção e recomendação dos programas corretivos adequados. O Plano de Ação é datado, assinado e integrado ao PGR. Apresentação dos resultados ao cliente com explicação em linguagem acessível.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Plano de Ação 5W2H</span>
+          <span class="tl-tag">Programas corretivos</span>
+          <span class="tl-tag">Apresentação ao cliente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">06</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Semana 3–4</div>
+        <div class="tl-title">Entrega, Documentação e eSocial</div>
+        <div class="tl-desc">Entrega do pacote completo de documentos: AEP, Inventário de Riscos, Critérios do GRO, Plano de Ação e evidências de participação dos trabalhadores. Orientação sobre integração ao eSocial. Treinamento básico para o responsável interno da empresa manter os registros atualizados.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Pacote completo</span>
+          <span class="tl-tag navy">eSocial</span>
+          <span class="tl-tag">Treinamento</span>
+          <span class="tl-tag">Assinatura dos docs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-num-col"><div class="tl-num">07</div></div>
+      <div class="tl-line-col"><div class="tl-line"></div></div>
+      <div class="tl-body">
+        <div class="tl-kicker">Contínuo</div>
+        <div class="tl-title">Monitoramento e Revisão Bienal</div>
+        <div class="tl-desc">Acompanhamento periódico dos indicadores de SST. Revisão obrigatória do inventário a cada 2 anos (ou antes em casos de mudança significativa na empresa). Atualização do GRO, nova documentação e relatório de evolução para a liderança. Geração de receita recorrente garantida pela lei.</div>
+        <div class="tl-tags">
+          <span class="tl-tag gold">Revisão bienal</span>
+          <span class="tl-tag">Receita recorrente</span>
+          <span class="tl-tag navy">Obrigatório por lei</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 06 ENTREGÁVEIS -->
+<section class="secao bg-alt fade-in" id="entregaveis">
+  <div class="sec-header">
+    <div class="sec-num">06</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Entregáveis</div>
+      <h2 class="sec-title">O que o cliente<br><em>recebe ao final</em></h2>
+      <p class="sec-subtitle">Todos os documentos com validade técnica e jurídica — prontos para apresentar ao Auditor Fiscal do Trabalho.</p>
+    </div>
+  </div>
+
+  <div class="entregavel">
+    <div class="ent-num">01</div>
+    <div class="ent-body">
+      <div class="ent-title">AEP — Avaliação Ergonômica Preliminar</div>
+      <div class="ent-desc">Documento com a análise das condições e organização do trabalho, incluindo observações in loco, análise das atividades por setor e identificação dos perigos ergonômicos e psicossociais. Base de todo o processo.</div>
+    </div>
+    <div class="ent-status obrig">Obrigatório</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">02</div>
+    <div class="ent-body">
+      <div class="ent-title">Inventário de Riscos Ocupacionais</div>
+      <div class="ent-desc">Registro de todos os perigos identificados com avaliação de severidade, probabilidade e nível de risco por setor e função. Conteúdo mínimo conforme subitem 1.5.7.3.2 da NR-1. Datado e assinado.</div>
+    </div>
+    <div class="ent-status obrig">Obrigatório</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">03</div>
+    <div class="ent-body">
+      <div class="ent-title">Documento de Critérios do GRO</div>
+      <div class="ent-desc">Formalização das gradações de severidade e probabilidade, níveis de risco, critérios de classificação e de tomada de decisão adotados pela organização. Exigido pela NR-1.</div>
+    </div>
+    <div class="ent-status obrig">Obrigatório</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">04</div>
+    <div class="ent-body">
+      <div class="ent-title">Plano de Ação</div>
+      <div class="ent-desc">Para cada risco identificado: medida de prevenção, responsável, prazo e forma de acompanhamento. Estruturado no método 5W2H. Conteúdo mínimo conforme subitem 1.5.5.2 da NR-1. Datado e assinado.</div>
+    </div>
+    <div class="ent-status obrig">Obrigatório</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">05</div>
+    <div class="ent-body">
+      <div class="ent-title">Relatório de Diagnóstico Psicossocial</div>
+      <div class="ent-desc">Análise técnica dos dados coletados nas entrevistas e instrumentos aplicados. Resultados por eixo (demandas, controle, suporte, função, saúde, ambiente) com nível de risco e recomendações. Integrado à AEP e ao inventário.</div>
+    </div>
+    <div class="ent-status">Complementar</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">06</div>
+    <div class="ent-body">
+      <div class="ent-title">Evidências de Participação dos Trabalhadores</div>
+      <div class="ent-desc">Registros de consultas, listas de presença, atas de reuniões e comunicações de risco que comprovam a participação efetiva dos trabalhadores no GRO — exigida pelo MTE na fiscalização.</div>
+    </div>
+    <div class="ent-status">Complementar</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">07</div>
+    <div class="ent-body">
+      <div class="ent-title">Guia de Implantação dos Programas Corretivos</div>
+      <div class="ent-desc">Documento orientativo para o cliente com passo a passo de implantação de cada programa recomendado — saúde mental, anti-assédio, comunicação organizacional etc. Cronograma de implantação e indicadores de acompanhamento.</div>
+    </div>
+    <div class="ent-status">Complementar</div>
+  </div>
+  <div class="entregavel">
+    <div class="ent-num">08</div>
+    <div class="ent-body">
+      <div class="ent-title">Orientação para eSocial</div>
+      <div class="ent-desc">Instrução sobre como registrar os eventos de SST no eSocial, quais informações incluir e como manter a documentação atualizada para fins de fiscalização digital do Ministério do Trabalho.</div>
+    </div>
+    <div class="ent-status">Complementar</div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 07 FINANCEIRO -->
+<section class="secao bg-white fade-in" id="financeiro">
+  <div class="sec-header">
+    <div class="sec-num">07</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Modelo Financeiro</div>
+      <h2 class="sec-title">Precificação e<br><em>modelo de receita</em></h2>
+      <p class="sec-subtitle">Três planos adaptados ao porte do cliente, com receita pontual no diagnóstico e recorrente na revisão bienal.</p>
+    </div>
+  </div>
+
+  <div class="financeiro-grid" style="margin-bottom:3rem;">
+    <div class="plano-fin">
+      <div class="pf-nome">Essencial</div>
+      <div class="pf-porte">Até 20 funcionários</div>
+      <div class="pf-preco">R$ 2.500</div>
+      <div class="pf-preco-label">valor de referência · negociável por setor</div>
+      <ul class="pf-items">
+        <li>AEP completa</li>
+        <li>Inventário de Riscos</li>
+        <li>Critérios do GRO</li>
+        <li>Plano de Ação básico</li>
+        <li>Orientação eSocial</li>
+        <li>Entrega em 15 dias úteis</li>
+      </ul>
+      <div class="pf-receita">
+        Receita recorrente (revisão bienal)
+        <strong>+ R$ 1.500 a cada 2 anos</strong>
+      </div>
+    </div>
+    <div class="plano-fin destaque">
+      <div class="pf-badge">Mais vendido</div>
+      <div class="pf-nome">Completo</div>
+      <div class="pf-porte">20 a 100 funcionários</div>
+      <div class="pf-preco">R$ 6.000</div>
+      <div class="pf-preco-label">valor de referência · negociável por setor</div>
+      <ul class="pf-items">
+        <li>Tudo do plano Essencial</li>
+        <li>Visita presencial por setor</li>
+        <li>Entrevistas estruturadas</li>
+        <li>Relatório diagnóstico completo</li>
+        <li>Treinamento para gestores</li>
+        <li>Suporte técnico por 3 meses</li>
+        <li>Documentação eSocial completa</li>
+      </ul>
+      <div class="pf-receita">
+        Receita recorrente (revisão bienal)
+        <strong>+ R$ 3.500 a cada 2 anos</strong>
+      </div>
+    </div>
+    <div class="plano-fin">
+      <div class="pf-nome">Estratégico</div>
+      <div class="pf-porte">Acima de 100 funcionários</div>
+      <div class="pf-preco">R$ 15.000+</div>
+      <div class="pf-preco-label">valor sob consulta · por setor e complexidade</div>
+      <ul class="pf-items">
+        <li>Tudo do plano Completo</li>
+        <li>Diagnóstico por setor, turno e regime</li>
+        <li>Implantação de programas corretivos</li>
+        <li>Monitoramento semestral</li>
+        <li>Relatórios executivos</li>
+        <li>Suporte técnico por 12 meses</li>
+      </ul>
+      <div class="pf-receita">
+        Receita recorrente (revisão bienal)
+        <strong>+ R$ 8.000+ a cada 2 anos</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-label" style="margin-bottom:1.5rem;">Tabela de serviços avulsos (add-ons)</div>
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th>Serviço</th>
+        <th>Descrição</th>
+        <th>Valor de Referência</th>
+        <th>Recorrente?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Treinamento de Lideranças</td>
+        <td>Capacitação presencial ou online, 4h, até 20 gestores</td>
+        <td>R$ 2.000</td>
+        <td><span class="x">—</span></td>
+      </tr>
+      <tr>
+        <td>Política Anti-Assédio</td>
+        <td>Elaboração de política interna e canal de denúncia</td>
+        <td>R$ 1.800</td>
+        <td><span class="x">—</span></td>
+      </tr>
+      <tr>
+        <td>Estruturação de Canal de Escuta</td>
+        <td>Criação do canal interno de denúncia e escuta ativa, com política e fluxo de apuração</td>
+        <td>R$ 1.500</td>
+        <td><span class="x">—</span></td>
+      </tr>
+      <tr>
+        <td>Monitoramento Trimestral</td>
+        <td>Acompanhamento de indicadores e relatório</td>
+        <td>R$ 800/trimestre</td>
+        <td><span class="check">Sim</span></td>
+      </tr>
+      <tr>
+        <td>Visita extra de fiscalização</td>
+        <td>Preparação e acompanhamento em caso de visita do MTE</td>
+        <td>R$ 1.200</td>
+        <td><span class="x">—</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 08 DIFERENCIAIS -->
+<section class="secao bg-alt fade-in" id="diferencial">
+  <div class="sec-header">
+    <div class="sec-num">08</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Diferenciais Competitivos</div>
+      <h2 class="sec-title">Por que a Trapp<br><em>se destaca</em></h2>
+      <p class="sec-subtitle">O que nos separa das consultorias tradicionais de SST e dos profissionais de RH que tentam oferecer o mesmo serviço.</p>
+    </div>
+  </div>
+
+  <div class="diff-row">
+    <div class="diff-item">
+      <div class="diff-icon">⚖️</div>
+      <div class="diff-title">Escopo correto — sem invadir outras profissões</div>
+      <div class="diff-desc">A Trapp sabe exatamente o que pode e o que não pode fazer. Não pretende ser psicólogo, médico ou advogado. Esse limite protege o negócio juridicamente e gera confiança — porque o cliente percebe seriedade e transparência.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-icon">📄</div>
+      <div class="diff-title">Processo técnico completo — não só questionário</div>
+      <div class="diff-desc">O MTE deixou claro: questionário isolado não comprova gestão de riscos. A Trapp entrega AEP + Inventário + Plano integrados, com coerência técnica que resiste à fiscalização. Nosso diferencial é exatamente o que a maioria não entrega.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-icon">🛡️</div>
+      <div class="diff-title">Documentação com validade legal garantida</div>
+      <div class="diff-desc">Todos os documentos atendem exatamente ao que o subitem 1.5.7.3.2 e 1.5.5.2 da NR-1 exigem. O cliente pode apresentar ao Auditor Fiscal com confiança. Sabemos o que o auditor vai pedir — e entregamos antes.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-icon">🌐</div>
+      <div class="diff-title">Cobertura de todos os regimes de trabalho</div>
+      <div class="diff-desc">Presencial, remoto, híbrido e teletrabalho — todos abrangidos, com metodologia adaptada a cada realidade. A maioria das consultorias não sabe como avaliar equipes remotas. Nós temos o processo estruturado.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-icon">🗣️</div>
+      <div class="diff-title">Linguagem do empresário, não do técnico</div>
+      <div class="diff-desc">Explicamos os riscos e os resultados em linguagem clara, sem jargão desnecessário. O empresário entende o que está sendo feito, por que é importante e o que precisa fazer. Isso gera confiança e fidelização.</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-icon">🔁</div>
+      <div class="diff-title">Receita recorrente garantida pela lei</div>
+      <div class="diff-desc">A revisão bienal obrigatória cria um ciclo natural de retorno do cliente. Cada cliente que entra se torna cliente por no mínimo 2 anos. Com fidelização, por muito mais. Modelo de negócio com previsibilidade financeira real.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 09 PROJEÇÃO -->
+<section class="secao bg-white fade-in" id="projecao">
+  <div class="sec-header">
+    <div class="sec-num">09</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Projeção de Crescimento</div>
+      <h2 class="sec-title">Onde chegamos<br><em>em 3 anos</em></h2>
+      <p class="sec-subtitle">Projeção conservadora de crescimento da Trapp Consultoria com foco em Santa Catarina nos dois primeiros anos e expansão regional no terceiro.</p>
+    </div>
+  </div>
+
+  <div class="proj-grid" style="margin-bottom:3rem;">
+    <div class="proj-cell">
+      <div class="proj-periodo">Fase 1 · Meses 1–6</div>
+      <div class="proj-valor">10–15</div>
+      <div class="proj-desc">clientes atendidos · foco em Jaraguá do Sul e região</div>
+    </div>
+    <div class="proj-cell">
+      <div class="proj-periodo">Fase 2 · Meses 7–12</div>
+      <div class="proj-valor">30–40</div>
+      <div class="proj-desc">clientes acumulados · expansão para Joinville e Blumenau</div>
+    </div>
+    <div class="proj-cell">
+      <div class="proj-periodo">Fase 3 · Ano 2</div>
+      <div class="proj-valor">80–100</div>
+      <div class="proj-desc">clientes · equipe de 3–4 consultores · região Sul</div>
+    </div>
+    <div class="proj-cell navy">
+      <div class="proj-periodo">Fase 4 · Ano 3</div>
+      <div class="proj-valor">200+</div>
+      <div class="proj-desc">clientes · receita recorrente dominante · expansão nacional</div>
+    </div>
+  </div>
+
+  <div class="cards-3">
+    <div class="card">
+      <div class="card-n">~R$180K</div>
+      <div class="card-label">Receita estimada · Ano 1</div>
+      <div class="card-desc">Baseado em 30 clientes com ticket médio de R$ 6.000. Conservador e atingível com prospecção ativa focada na região de Jaraguá do Sul.</div>
+    </div>
+    <div class="card">
+      <div class="card-n">~R$520K</div>
+      <div class="card-label">Receita estimada · Ano 2</div>
+      <div class="card-desc">90 clientes novos + receita recorrente dos clientes do ano 1 em monitoramento e primeiros contratos de revisão bienal.</div>
+    </div>
+    <div class="card">
+      <div class="card-n">~R$1,2M</div>
+      <div class="card-label">Receita estimada · Ano 3</div>
+      <div class="card-desc">Base consolidada de clientes + receita recorrente crescente + expansão para outros estados. Margem líquida projetada acima de 40%.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-full"></div>
+
+<!-- 10 PRÓXIMOS PASSOS -->
+<section class="secao bg-navy fade-in" id="passos">
+  <div class="sec-header">
+    <div class="sec-num" style="color:rgba(196,147,58,0.2);">10</div>
+    <div class="sec-meta">
+      <div class="sec-kicker">Próximos Passos</div>
+      <h2 class="sec-title light">O que precisa<br><em>acontecer agora</em></h2>
+      <p class="sec-subtitle light">Roteiro de ações para colocar a Trapp Consultoria em operação nos próximos 90 dias.</p>
+    </div>
+  </div>
+
+  <div class="passos" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">01</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Constituição da empresa</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Abertura do CNPJ, definição do regime tributário, elaboração do contrato social e registro na Junta Comercial de SC.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Semana 1–2</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">02</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Estruturação metodológica</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Finalização dos instrumentos de diagnóstico (questionários, roteiros de entrevista, modelos de documentos) e criação dos templates padrão de entrega.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Semana 2–3</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">03</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Presença digital e materiais</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Publicação do site institucional (página de vendas já criada), perfil no LinkedIn, materiais de apresentação e proposta comercial padrão.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Semana 3</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">04</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Projeto piloto — cliente zero</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Execução do primeiro projeto com valor reduzido (ou gratuito) para validar a metodologia, gerar depoimento e construir o portfólio inicial.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Semana 3–4</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">05</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Prospecção ativa e parcerias</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Contato com sindicatos, associações comerciais (ACIJS, CDL), contadores e RHs de Jaraguá do Sul. Parcerias de indicação com profissionais de SST e medicina do trabalho.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Mês 2</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="passo-n" style="color:var(--gold);">06</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Contratação do analista de SST</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Quando a demanda justificar, contratação do profissional técnico de SST para escalar os atendimentos. A NR-1 não exige psicólogo ou médico — exige conhecimento técnico adequado à complexidade dos riscos.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Mês 2–3</div>
+    </div>
+    <div class="passo" style="background:rgba(255,255,255,0.04);">
+      <div class="passo-n" style="color:var(--gold);">07</div>
+      <div class="passo-body">
+        <div class="passo-title" style="color:var(--white);">Avaliação e expansão</div>
+        <div class="passo-desc" style="color:rgba(255,255,255,0.45);">Revisão dos primeiros 3 meses de operação, ajuste de preços e metodologia, e planejamento da expansão para novas cidades catarinenses.</div>
+      </div>
+      <div class="passo-prazo" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.3);">Mês 3</div>
+    </div>
+  </div>
+
+  <div style="margin-top:4rem;padding:3rem;background:rgba(196,147,58,0.08);border:1px solid rgba(196,147,58,0.2);">
+    <div class="sec-kicker" style="color:var(--gold2);">Conclusão</div>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:500;color:var(--white);line-height:1.4;margin-top:0.5rem;margin-bottom:1.2rem;">
+      A Trapp Consultoria está posicionada para capturar uma fatia significativa de um mercado criado por lei, com receita recorrente, baixa concorrência especializada e demanda urgente e compulsória.
+    </p>
+    <p style="font-size:0.88rem;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.8;">
+      O momento é agora. A lei entrou em vigor. As empresas precisam. A concorrência ainda não se organizou. A Trapp tem a metodologia, o posicionamento e a urgência ao seu favor.
+    </p>
+  </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer style="background:var(--ink);padding:2rem 5rem;display:flex;justify-content:space-between;align-items:center;">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--white);">Trapp <span style="color:var(--gold);">Consultoria</span></div>
+  <p style="font-family:'DM Mono',monospace;font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:0.1em;text-transform:uppercase;">Dossiê Executivo · TC-DOSSIE-2026-01 · Uso Interno · Maio 2026</p>
+</footer>
+
+</main>
+
+<script>
+// Fade-in on scroll
+const obs = new IntersectionObserver(e => {
+  e.forEach(el => { if(el.isIntersecting) el.target.classList.add('visible'); });
+}, {threshold:0.05});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+// Active nav tracking
+const sections = document.querySelectorAll('section[id], div[id]');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if(window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if(item.getAttribute('href') === '#' + current) item.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
