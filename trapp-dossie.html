@@ -8,8 +8,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0c1c3a;--navy2:#152848;--navy3:#1e3a60;
-  --gold:#c4933a;--gold2:#ddb96a;--gold3:#f0dba8;
+  --navy:#0d396b;--navy2:#0a2d55;--navy3:#1a4d85;
+  --ink:#0c1c3a;
+  --gold:#c49d4c;--gold2:#d4b46a;--gold3:#edd99a;
   --cream:#f8f5f0;--white:#ffffff;
   --ink:#0c1225;--soft:#3d4f6e;--muted:#7a8ba8;
   --line:#ddd8d0;--bg:#f2efe9;
@@ -21,7 +22,7 @@ body{background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif;fo
 /* SIDEBAR NAV */
 .sidebar{
   position:fixed;top:0;left:0;height:100vh;width:240px;
-  background:var(--navy);z-index:200;
+  background:var(--ink);z-index:200;
   display:flex;flex-direction:column;
   padding:0;overflow-y:auto;
   transition:transform 0.3s ease;
@@ -74,7 +75,7 @@ body{background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif;fo
 
 /* CAPA */
 .capa{
-  background:var(--navy);
+  background:var(--navy2);
   min-height:100vh;display:flex;flex-direction:column;
   position:relative;overflow:hidden;
   padding:4rem 5rem;
