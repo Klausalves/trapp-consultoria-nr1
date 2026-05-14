@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trapp Consultoria NR-1 — Estrutura do Negócio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0f2044; --gold: #c9a84c; --gold-light: #e8c97a;
+    --cream: #faf8f4; --white: #ffffff; --text: #1a1a2e; --text-soft: #4a5068;
+    --text-muted: #8a90a8; --line: #e2ddd5; --line-dark: #c8c2b8; --bg-alt: #f3f0ea;
+    --green: #1a7a4a;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top:0; left:0; right:0; z-index:100; background: rgba(250,248,244,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 0 2.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: baseline; gap: 0.6rem; }
+  .nav-logo-main { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 900; color: var(--navy); }
+  .nav-logo-main span { color: var(--gold); }
+  .nav-logo-sub { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .nav-badge { background: var(--navy); color: var(--gold); font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 0.3rem 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; }
+
+  /* HERO */
+  .hero { min-height: 100vh; background: var(--white); display: grid; grid-template-rows: 64px 1fr auto; position: relative; overflow: hidden; padding: 0 2.5rem 3rem; }
+  .hero::after { content:''; position:absolute; top:0; right:0; width:42%; height:100%; background:var(--navy); clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%); z-index:0; }
+  .hero::before { content:''; position:absolute; top:0; right:calc(42% - 2px); width:3px; height:100%; background: linear-gradient(to bottom, var(--gold), transparent 80%); z-index:1; }
+  .hero-spacer { height: 64px; }
+  .hero-body { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; position: relative; z-index:2; padding: 4rem 0; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 1.5rem; display:flex; align-items:center; gap:0.8rem; }
+  .hero-eyebrow::before { content:''; width:2rem; height:1.5px; background:var(--gold); }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 5vw, 4.8rem); font-weight: 900; color: var(--navy); line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 1.8rem; }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-desc { color: var(--text-soft); font-size: 0.98rem; max-width: 460px; font-weight: 300; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-cta-row { display:flex; gap:1rem; align-items:center; }
+  .btn-primary { background: var(--navy); color: var(--white); font-size: 0.78rem; font-weight: 600; padding: 0.85rem 1.8rem; text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; transition: background 0.2s, color 0.2s; }
+  .btn-primary:hover { background: var(--gold); color: var(--navy); }
+  .btn-ghost { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; display:flex; align-items:center; gap:0.4rem; }
+  .btn-ghost::after { content:'↓'; }
+  .hero-right { display:flex; flex-direction:column; gap:1.5px; align-self:stretch; padding: 3rem 0 3rem 3rem; }
+  .hero-stat-card { background: var(--navy); border: 1px solid rgba(201,168,76,0.25); padding: 1.8rem 2rem; flex:1; }
+  .hero-stat-n { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; color: var(--gold); line-height:1; margin-bottom:0.3rem; }
+  .hero-stat-l { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: rgba(255,255,255,0.5); letter-spacing:0.12em; text-transform:uppercase; }
+  .hero-stat-desc { font-size: 0.8rem; color: rgba(255,255,255,0.7); font-weight: 300; margin-top:0.4rem; line-height:1.5; }
+  .hero-bottom { position:relative; z-index:2; }
+  .hero-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-muted); letter-spacing:0.12em; text-transform:uppercase; display:flex; align-items:center; gap:0.8rem; }
+  .hero-tag::before { content:''; width:2rem; height:1px; background:var(--line-dark); }
+
+  /* VIGÊNCIA */
+  .vigencia-bar { background: #fff8e8; border-top: 3px solid var(--gold); border-bottom: 1px solid #e8d8a0; padding: 1.2rem 2.5rem; }
+  .vigencia-inner { max-width:1120px; margin:0 auto; display:flex; align-items:center; gap:2rem; flex-wrap:wrap; }
+  .vigencia-icon { font-size:1.5rem; flex-shrink:0; }
+  .vigencia-text { font-size:0.88rem; color:#6a5010; line-height:1.6; }
+  .vigencia-text strong { color:#4a3500; }
+  .vigencia-badge { background:var(--gold); color:var(--navy); font-family:'DM Mono',monospace; font-size:0.65rem; padding:0.35rem 0.9rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; border-radius:2px; flex-shrink:0; margin-left:auto; }
+
+  /* PROPOSTA DE VALOR */
+  .proposta-bar { background: var(--navy); padding: 3rem 2.5rem; }
+  .proposta-inner { max-width:1120px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.06); }
+  .prop-item { padding:2rem 2.2rem; }
+  .prop-n { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--gold); line-height:1; margin-bottom:0.4rem; }
+  .prop-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:rgba(255,255,255,0.35); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem; }
+  .prop-desc { font-size:0.82rem; color:rgba(255,255,255,0.55); font-weight:300; line-height:1.6; }
+
+  /* SECTIONS */
+  .section { padding: 5rem 2.5rem; max-width: 1120px; margin: 0 auto; }
+  .sec-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--gold); letter-spacing:0.25em; text-transform:uppercase; margin-bottom:1.2rem; display:flex; align-items:center; gap:0.8rem; }
+  .sec-label::before { content:''; width:2rem; height:1.5px; background:var(--gold); }
+  .sec-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:var(--navy); line-height:1.1; margin-bottom:3rem; letter-spacing:-0.02em; }
+  .sec-title em { color:var(--gold); font-style:italic; }
+  .divider { height:1px; background:var(--line); margin:0 2.5rem; }
+
+  /* INFO BOX */
+  .info-box { background:var(--bg-alt); border-left:3px solid var(--navy); padding:1.2rem 1.5rem; margin-bottom:2rem; }
+  .info-box-label { font-family:'DM Mono',monospace; font-size:0.58rem; color:var(--navy); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem; font-weight:500; }
+  .info-box p { font-size:0.82rem; color:var(--text-soft); line-height:1.7; font-weight:300; }
+  .info-box.gold-left { border-left-color:var(--gold); }
+
+  /* POSICIONAMENTO */
+  .pos-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:4rem; }
+  .pos-cell { background:var(--white); padding:2.5rem; }
+  .pos-cell.navy { background:var(--navy); color:var(--white); }
+  .pos-cell.gold { background:var(--gold); color:var(--navy); }
+  .pos-cell-label { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.45; margin-bottom:1rem; }
+  .pos-cell-value { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; line-height:1.2; margin-bottom:0.7rem; }
+  .pos-cell-sub { font-size:0.85rem; opacity:0.7; font-weight:300; line-height:1.65; }
+
+  /* DOCUMENTOS */
+  .docs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:3rem; }
+  .doc-card { background:var(--white); padding:2rem; }
+  .doc-card.required { background:var(--navy); color:var(--white); }
+  .doc-icon { font-size:1.5rem; margin-bottom:1rem; }
+  .doc-required-badge { font-family:'DM Mono',monospace; font-size:0.52rem; color:var(--gold); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.8rem; }
+  .doc-title { font-size:0.9rem; font-weight:600; margin-bottom:0.5rem; line-height:1.3; }
+  .doc-card.required .doc-title { color:var(--white); }
+  .doc-desc { font-size:0.8rem; color:var(--text-soft); line-height:1.65; font-weight:300; }
+  .doc-card.required .doc-desc { color:rgba(255,255,255,0.6); }
+  .doc-ref { font-family:'DM Mono',monospace; font-size:0.55rem; margin-top:1rem; color:var(--text-muted); letter-spacing:0.05em; }
+  .doc-card.required .doc-ref { color:rgba(255,255,255,0.3); }
+
+  /* FLUXO */
+  .flow { display:flex; flex-direction:column; }
+  .flow-step { display:grid; grid-template-columns:90px 1fr; gap:2rem; padding-bottom:2.5rem; position:relative; }
+  .flow-step:last-child { padding-bottom:0; }
+  .flow-step::after { content:''; position:absolute; left:44px; top:70px; bottom:0; width:1px; background:var(--line); }
+  .flow-step:last-child::after { display:none; }
+  .step-num { width:90px; height:90px; background:var(--white); border:1.5px solid var(--navy); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--navy); flex-shrink:0; position:relative; z-index:1; transition:all 0.25s; }
+  .flow-step:hover .step-num { background:var(--navy); color:var(--gold); }
+  .step-body { padding-top:1.2rem; }
+  .step-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--navy); margin-bottom:0.5rem; }
+  .step-desc { font-size:0.88rem; color:var(--text-soft); line-height:1.75; font-weight:300; }
+  .step-note { font-size:0.78rem; color:var(--navy); background:#e8f0fa; border-left:2px solid var(--navy); padding:0.6rem 0.9rem; margin-top:0.8rem; line-height:1.55; }
+  .step-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:1rem; }
+  .tag { font-family:'DM Mono',monospace; font-size:0.57rem; padding:0.2rem 0.6rem; border:1px solid var(--line-dark); color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; border-radius:1px; }
+  .tag.navy { border-color:var(--navy); color:var(--navy); }
+  .tag.gold { border-color:var(--gold); color:#8a6a1a; }
+  .tag.green { border-color:var(--green); color:var(--green); }
+
+  /* QUESTIONÁRIO */
+  .q-block { background:var(--bg-alt); border-top:3px solid var(--navy); padding:5rem 2.5rem; }
+  .q-inner { max-width:1120px; margin:0 auto; }
+  .q-header { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-bottom:2rem; align-items:end; }
+  .q-intro { font-size:0.9rem; color:var(--text-soft); font-weight:300; line-height:1.8; }
+  .q-warning { background:white; border:1px solid var(--line-dark); border-left:3px solid var(--gold); padding:1rem 1.2rem; margin-bottom:2rem; font-size:0.82rem; color:var(--text-soft); line-height:1.65; }
+  .q-warning strong { color:var(--navy); }
+  .q-groups { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line-dark); border:1px solid var(--line-dark); }
+  .q-group { background:var(--white); padding:1.8rem; }
+  .q-group-title { font-size:0.78rem; font-weight:600; color:var(--navy); margin-bottom:1.2rem; padding-bottom:0.7rem; border-bottom:2px solid var(--gold); }
+  .q-list { list-style:none; display:flex; flex-direction:column; gap:0.55rem; }
+  .q-list li { font-size:0.8rem; color:var(--text-soft); font-weight:300; padding-left:1rem; position:relative; line-height:1.5; }
+  .q-list li::before { content:'·'; position:absolute; left:0; color:var(--gold); font-weight:700; font-size:1rem; top:-1px; }
+
+  /* FISCALIZAÇÃO */
+  .fisc-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:2rem; }
+  .fisc-card { background:var(--white); padding:2rem; }
+  .fisc-card.dark { background:var(--navy); }
+  .fisc-icon { font-size:1.4rem; margin-bottom:0.8rem; }
+  .fisc-title { font-size:0.88rem; font-weight:600; color:var(--navy); margin-bottom:0.5rem; }
+  .fisc-card.dark .fisc-title { color:var(--gold); }
+  .fisc-desc { font-size:0.8rem; color:var(--text-soft); line-height:1.65; font-weight:300; }
+  .fisc-card.dark .fisc-desc { color:rgba(255,255,255,0.6); }
+  .fisc-source { font-family:'DM Mono',monospace; font-size:0.52rem; color:var(--text-muted); margin-top:0.8rem; letter-spacing:0.06em; }
+  .fisc-card.dark .fisc-source { color:rgba(255,255,255,0.25); }
+
+  /* PROGRAMAS */
+  .prog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .prog-card { background:var(--white); padding:2rem; transition:background 0.25s; position:relative; overflow:hidden; }
+  .prog-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+  .prog-card:hover::before { transform:scaleX(1); }
+  .prog-card:hover { background:var(--navy); }
+  .prog-card:hover .prog-title { color:var(--white); }
+  .prog-card:hover .prog-desc { color:rgba(255,255,255,0.52); }
+  .prog-card:hover .prog-tag { border-color:rgba(201,168,76,0.3); color:var(--gold-light); }
+  .prog-icon { font-size:1.6rem; margin-bottom:1rem; }
+  .prog-title { font-size:0.88rem; font-weight:600; color:var(--navy); margin-bottom:0.6rem; line-height:1.3; transition:color 0.25s; }
+  .prog-desc { font-size:0.8rem; color:var(--text-soft); line-height:1.65; font-weight:300; transition:color 0.25s; }
+  .prog-tag { display:inline-block; margin-top:1rem; font-family:'DM Mono',monospace; font-size:0.55rem; padding:0.2rem 0.5rem; border:1px solid var(--line-dark); color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; transition:all 0.25s; }
+
+  /* MODELO COMERCIAL */
+  .com-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .com-card { background:var(--white); padding:2.5rem; }
+  .com-card.featured { background:var(--navy); color:var(--white); position:relative; }
+  .com-featured-badge { position:absolute; top:1.5rem; right:1.5rem; background:var(--gold); color:var(--navy); font-family:'DM Mono',monospace; font-size:0.52rem; padding:0.22rem 0.55rem; letter-spacing:0.1em; text-transform:uppercase; font-weight:500; }
+  .com-name { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:1.2rem; }
+  .com-card.featured .com-name { color:rgba(255,255,255,0.38); }
+  .com-price { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900; color:var(--navy); line-height:1.05; margin-bottom:0.3rem; }
+  .com-card.featured .com-price { color:var(--gold); }
+  .com-price-label { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--text-muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line); }
+  .com-card.featured .com-price-label { color:rgba(255,255,255,0.3); border-bottom-color:rgba(255,255,255,0.1); }
+  .com-items { list-style:none; display:flex; flex-direction:column; gap:0.7rem; }
+  .com-items li { font-size:0.85rem; font-weight:300; padding-left:1.2rem; position:relative; color:var(--text-soft); line-height:1.4; }
+  .com-items li::before { content:'✓'; position:absolute; left:0; color:var(--gold); font-size:0.7rem; font-weight:700; }
+  .com-card.featured .com-items li { color:rgba(255,255,255,0.68); }
+
+  /* DIFERENCIAIS */
+  .diff-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:start; }
+  .diff-headline { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,4vw,3.5rem); font-weight:900; color:var(--navy); line-height:1.05; letter-spacing:-0.02em; }
+  .diff-headline em { color:var(--gold); font-style:italic; }
+  .diff-sub { font-size:0.88rem; color:var(--text-soft); font-weight:300; line-height:1.75; margin-top:1.2rem; }
+  .diff-items { display:flex; flex-direction:column; gap:1.2rem; }
+  .diff-item { padding:1.4rem 1.6rem; background:var(--white); border-left:3px solid var(--line-dark); transition:border-color 0.25s, box-shadow 0.25s; }
+  .diff-item:hover { border-left-color:var(--gold); box-shadow:0 4px 20px rgba(0,0,0,0.04); }
+  .diff-item-title { font-weight:600; font-size:0.9rem; color:var(--navy); margin-bottom:0.35rem; }
+  .diff-item-desc { font-size:0.82rem; color:var(--text-soft); font-weight:300; line-height:1.65; }
+
+  /* FOOTER */
+  footer { background:var(--navy); padding:4rem 2.5rem 3rem; }
+  .footer-inner { max-width:1120px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:end; }
+  .footer-logo { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--white); }
+  .footer-logo span { color:var(--gold); }
+  .footer-tagline { font-family:'DM Mono',monospace; font-size:0.6rem; color:rgba(255,255,255,0.3); letter-spacing:0.15em; text-transform:uppercase; margin-top:0.5rem; }
+  .footer-right { text-align:right; }
+  .footer-right p { font-family:'DM Mono',monospace; font-size:0.58rem; color:rgba(255,255,255,0.28); letter-spacing:0.1em; text-transform:uppercase; line-height:1.9; }
+  .footer-gold-line { width:3rem; height:2px; background:var(--gold); margin:1.5rem 0 0 auto; }
+  .footer-source { font-family:'DM Mono',monospace; font-size:0.55rem; color:rgba(255,255,255,0.2); letter-spacing:0.08em; text-transform:uppercase; margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.08); text-align:center; max-width:1120px; margin-left:auto; margin-right:auto; }
+
+  /* ANIMATIONS */
+  .fade-up { opacity:0; transform:translateY(18px); transition:opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity:1; transform:none; }
+
+  /* RESPONSIVE */
+  @media (max-width:900px) {
+    .hero::after, .hero::before { display:none; }
+    .hero-body { grid-template-columns:1fr; }
+    .hero-right { padding:0; flex-direction:row; overflow-x:auto; gap:1px; }
+    .hero-stat-card { min-width:150px; background:var(--navy); }
+    .pos-grid, .q-groups, .prog-grid, .com-grid, .docs-grid, .fisc-grid { grid-template-columns:1fr; }
+    .q-header, .diff-grid, .proposta-inner { grid-template-columns:1fr; }
+    .flow-step { grid-template-columns:70px 1fr; }
+    .step-num { width:70px; height:70px; }
+    .flow-step::after { left:34px; }
+    .footer-inner { grid-template-columns:1fr; }
+    .footer-right { text-align:left; }
+    .footer-gold-line { margin-left:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-main">Trapp <span>Consultoria</span></div>
+    <div class="nav-logo-sub">Gestão de Riscos &middot; NR-1</div>
+  </div>
+  <div class="nav-badge">Vigência: 26/05/2026</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-spacer"></div>
+  <div class="hero-body">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Estrutura do Negócio &mdash; Versão 1.0</div>
+      <h1 class="hero-title">Gestão de<br>Risco <em>Psicossocial</em><br>com Rigor Técnico</h1>
+      <p class="hero-desc">Consultoria especializada em GRO/PGR com foco em riscos psicossociais, oferecendo processo técnico completo e documentação com validade legal para empresas de todos os portes e regimes de trabalho.</p>
+      <div class="hero-cta-row">
+        <a href="#posicionamento" class="btn-primary">Ver a estrutura</a>
+        <a href="#fluxo" class="btn-ghost">Explorar</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat-card">
+        <div class="hero-stat-n">26/05</div>
+        <div class="hero-stat-l">Vigência 2026</div>
+        <div class="hero-stat-desc">90 dias de dupla visita orientativa após a entrada em vigor da nova NR-1</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-n">2 anos</div>
+        <div class="hero-stat-l">Revisão mínima</div>
+        <div class="hero-stat-desc">Periodicidade obrigatória de reavaliação do inventário de riscos conforme NR-1</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-n">3</div>
+        <div class="hero-stat-l">Docs obrigatórios</div>
+        <div class="hero-stat-desc">Inventário de riscos, plano de ação e critérios do GRO — exigidos pela NR-1</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-tag">Trapp Consultoria &middot; Saúde Ocupacional &middot; Riscos Psicossociais &middot; NR-1</div>
+  </div>
+</section>
+
+<!-- VIGÊNCIA -->
+<div class="vigencia-bar">
+  <div class="vigencia-inner">
+    <div class="vigencia-icon">⚠️</div>
+    <div class="vigencia-text">
+      <strong>Atenção: novo texto da NR-1 entra em vigor em 26/05/2026.</strong> Durante os primeiros 90 dias, a fiscalização atua com caráter <strong>orientativo (dupla visita)</strong>. Após esse período, empresas ficam sujeitas a autuação, inclusive por descumprimento das obrigações relacionadas a riscos psicossociais, nos termos do art. 201 da CLT.
+    </div>
+    <div class="vigencia-badge">MTE · Q&amp;A Oficial 30/04/2026</div>
+  </div>
+</div>
+
+<!-- PROPOSTA DE VALOR -->
+<div class="proposta-bar">
+  <div class="proposta-inner">
+    <div class="prop-item">
+      <div class="prop-label">Nossa entrega</div>
+      <div class="prop-n">AEP</div>
+      <div class="prop-desc">Avaliação Ergonômica Preliminar integrada ao inventário de riscos — o instrumento central exigido pela NR-1 e NR-17.</div>
+    </div>
+    <div class="prop-item">
+      <div class="prop-label">Nossa metodologia</div>
+      <div class="prop-n">GRO</div>
+      <div class="prop-desc">Gerenciamento de Riscos Ocupacionais completo: identificação, avaliação, plano de ação e monitoramento contínuo.</div>
+    </div>
+    <div class="prop-item">
+      <div class="prop-label">Nossa garantia</div>
+      <div class="prop-n">100%</div>
+      <div class="prop-desc">Documentação tecnicamente coerente, preparada para fiscalização do Auditor Fiscal do Trabalho.</div>
+    </div>
+  </div>
+</div>
+
+<!-- POSICIONAMENTO -->
+<section class="section fade-up" id="posicionamento">
+  <div class="sec-label">01 &mdash; Identidade</div>
+  <h2 class="sec-title">Posiciona<em>mento</em></h2>
+  <div class="pos-grid">
+    <div class="pos-cell navy">
+      <div class="pos-cell-label">Missão</div>
+      <div class="pos-cell-value">Transformar compliance em cultura organizacional real</div>
+      <div class="pos-cell-sub">Ajudar empresas a cumprir a NR-1 com consistência técnica — não só documentação, mas processo contínuo e efetivo de prevenção.</div>
+    </div>
+    <div class="pos-cell">
+      <div class="pos-cell-label">Público-alvo</div>
+      <div class="pos-cell-value">PMEs de todo setor, incluindo home office e híbrido</div>
+      <div class="pos-cell-sub">O MTE confirma: o GRO abrange trabalho remoto, híbrido e teletrabalho. Todas as empresas são obrigadas, independente do regime de trabalho.</div>
+    </div>
+    <div class="pos-cell">
+      <div class="pos-cell-label">Proposta de valor</div>
+      <div class="pos-cell-value">AEP + Inventário + Plano de Ação integrados</div>
+      <div class="pos-cell-sub">Questionário isolado não basta. O MTE exige integração técnica dos resultados à AEP e ao inventário de riscos. Entregamos o processo completo.</div>
+    </div>
+    <div class="pos-cell gold">
+      <div class="pos-cell-label">Diferencial</div>
+      <div class="pos-cell-value">Processo técnico completo + documentação para fiscalização</div>
+      <div class="pos-cell-sub">A fiscalização cobra coerência entre metodologia, critérios, realidade das atividades e medidas implementadas. Preparamos a empresa para tudo isso.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DOCUMENTOS OBRIGATÓRIOS -->
+<section class="section fade-up" id="docs">
+  <div class="sec-label">02 &mdash; O que a lei exige</div>
+  <h2 class="sec-title">Documentos <em>Obrigatórios</em></h2>
+
+  <div class="info-box gold-left">
+    <div class="info-box-label">Fonte oficial &middot; MTE Q&amp;A — 1ª Rodada (30/04/2026) — Pergunta 2</div>
+    <p>São documentos obrigatórios previstos na NR-1: o <strong>inventário de riscos</strong>, o <strong>plano de ação</strong> e o <strong>documento dos critérios adotados no GRO</strong>. A AEP torna-se obrigatória para ME e EPP graus de risco 1 e 2 dispensadas de PGR. Questionários sozinhos não comprovam gestão de riscos.</p>
+  </div>
+
+  <div class="docs-grid">
+    <div class="doc-card required">
+      <div class="doc-required-badge">⚠ Obrigatório · NR-1</div>
+      <div class="doc-icon">📋</div>
+      <div class="doc-title">Inventário de Riscos</div>
+      <div class="doc-desc">Registro de todos os perigos identificados, incluindo fatores psicossociais, com avaliação de severidade e probabilidade por setor e função. Conteúdo mínimo no subitem 1.5.7.3.2 da NR-1.</div>
+      <div class="doc-ref">NR-1 · Subitem 1.5.7.3.2</div>
+    </div>
+    <div class="doc-card required">
+      <div class="doc-required-badge">⚠ Obrigatório · NR-1</div>
+      <div class="doc-icon">🗂️</div>
+      <div class="doc-title">Plano de Ação</div>
+      <div class="doc-desc">Para cada risco identificado: medida de prevenção, responsável, prazo e forma de acompanhamento. Mínimo previsto no subitem 1.5.5.2. Deve ser datado e assinado pelos responsáveis.</div>
+      <div class="doc-ref">NR-1 · Subitem 1.5.5.2</div>
+    </div>
+    <div class="doc-card required">
+      <div class="doc-required-badge">⚠ Obrigatório · NR-1</div>
+      <div class="doc-icon">⚖️</div>
+      <div class="doc-title">Critérios do GRO</div>
+      <div class="doc-desc">Documento com as gradações de severidade e probabilidade, níveis de risco e critérios de classificação e tomada de decisão adotados pela organização.</div>
+      <div class="doc-ref">NR-1 · Capítulo 1.5</div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-icon">🔍</div>
+      <div class="doc-title">AEP — Avaliação Ergonômica Preliminar</div>
+      <div class="doc-desc">Obrigatória para ME/EPP graus 1 e 2. Para as demais, é a evidência central do processo de gestão dos riscos ergonômicos e psicossociais. Resultados de questionários devem ser anexados a ela.</div>
+      <div class="doc-ref">NR-17 · MTE Q&amp;A Pergunta 2</div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-icon">📊</div>
+      <div class="doc-title">Resultados das Metodologias Aplicadas</div>
+      <div class="doc-desc">Questionários, entrevistas, grupos focais ou observação direta: resultados devem ser tecnicamente analisados e integrados à AEP e/ou inventário de riscos. Não valem de forma isolada.</div>
+      <div class="doc-ref">MTE Q&amp;A · Pergunta 10</div>
+    </div>
+    <div class="doc-card">
+      <div class="doc-icon">👥</div>
+      <div class="doc-title">Evidências de Participação dos Trabalhadores</div>
+      <div class="doc-desc">Registros de consultas, atas de reuniões, comunicações de risco e capacitações. A fiscalização cobra participação efetiva e contínua — não apenas registros formais isolados.</div>
+      <div class="doc-ref">MTE Q&amp;A · Pergunta 17</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FLUXO -->
+<section class="section fade-up" id="fluxo">
+  <div class="sec-label">03 &mdash; Como Trabalhamos</div>
+  <h2 class="sec-title">Fluxo de <em>Entrega</em></h2>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <div class="step-title">Prospecção e Diagnóstico Inicial</div>
+        <div class="step-desc">Reunião de onboarding para entender porte, setor, regime de trabalho (presencial, remoto, híbrido) e histórico de SST. Definição das unidades de avaliação — função, setor ou grupo similar de exposição — compatíveis com o PGR ou AEP existente.</div>
+        <div class="step-note">⚡ O MTE confirma: o GRO deve abranger trabalho remoto, híbrido e teletrabalho. A unidade de avaliação deve ser definida antes da coleta de dados.</div>
+        <div class="step-tags">
+          <span class="tag gold">Onboarding</span>
+          <span class="tag">Unidades de avaliação</span>
+          <span class="tag">Regimes de trabalho</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <div class="step-title">AEP — Avaliação Ergonômica Preliminar</div>
+        <div class="step-desc">Realização da Avaliação Ergonômica Preliminar conforme NR-17, com análise das condições e organização do trabalho, observação das atividades in loco e diálogo direto com os trabalhadores. Para grupos pequenos, a observação direta e o diálogo são os métodos prioritários indicados pelo MTE.</div>
+        <div class="step-note">⚡ A AEP é o instrumento central — questionários são subsídio, não substituto. Avaliação médica periódica NÃO substitui a AEP.</div>
+        <div class="step-tags">
+          <span class="tag gold">AEP · NR-17</span>
+          <span class="tag">Observação in loco</span>
+          <span class="tag navy">Análise da atividade</span>
+          <span class="tag">Diálogo com trabalhadores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <div class="step-title">Aplicação de Instrumentos de Diagnóstico</div>
+        <div class="step-desc">Aplicação de questionários estruturados, entrevistas individuais e/ou grupos focais como metodologias complementares à AEP — nunca como único instrumento. Os resultados são tecnicamente analisados e integrados ao inventário de riscos, com análise técnica documentada.</div>
+        <div class="step-note">⚡ O MTE é claro: questionário isolado não comprova gestão de riscos. Os resultados precisam ser incorporados à AEP e/ou inventário com análise técnica qualificada.</div>
+        <div class="step-tags">
+          <span class="tag gold">Questionários validados</span>
+          <span class="tag">Entrevistas estruturadas</span>
+          <span class="tag navy">Dados anônimos por setor</span>
+          <span class="tag">Grupos focais (quando aplicável)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <div class="step-title">Inventário de Riscos + Critérios do GRO</div>
+        <div class="step-desc">Consolidação de todos os dados no inventário de riscos — com os perigos identificados, avaliação de severidade e probabilidade, e níveis de risco por setor e função. Formalização dos critérios do GRO adotados (gradações, classificação e tomada de decisão).</div>
+        <div class="step-note">⚡ A ausência de riscos psicossociais no inventário não é irregularidade — desde que a empresa demonstre processo técnico adequado para reconhecer ou afastar esses fatores.</div>
+        <div class="step-tags">
+          <span class="tag gold">Inventário de Riscos</span>
+          <span class="tag">Critérios GRO formalizados</span>
+          <span class="tag navy">Documento com validade legal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">05</div>
+      <div class="step-body">
+        <div class="step-title">Plano de Ação e Programas Corretivos</div>
+        <div class="step-desc">Para cada risco identificado: medida de prevenção, responsável, prazo e forma de acompanhamento. Seleção e implantação dos programas corretivos adequados à natureza dos riscos. O plano é datado, assinado e integrado ao PGR da organização.</div>
+        <div class="step-tags">
+          <span class="tag gold">Método 5W2H</span>
+          <span class="tag">Hierarquia de prevenção</span>
+          <span class="tag">Programas customizados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num">06</div>
+      <div class="step-body">
+        <div class="step-title">Monitoramento, Revisão e Documentação Contínua</div>
+        <div class="step-desc">Revisão periódica do inventário — mínimo a cada 2 anos, conforme NR-1 subitem 1.5.4.4.6, ou antes em caso de mudanças relevantes nas condições ou organização do trabalho. Documentação de acompanhamento, evidências de participação dos trabalhadores e integração ao eSocial.</div>
+        <div class="step-note">⚡ A fiscalização cobra evidências de participação efetiva dos trabalhadores em todas as etapas — não apenas documentos formais.</div>
+        <div class="step-tags">
+          <span class="tag gold">Revisão bienal mínima</span>
+          <span class="tag navy">eSocial</span>
+          <span class="tag">Participação documentada</span>
+          <span class="tag green">Evidências para fiscalização</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONÁRIO -->
+<div class="q-block fade-up">
+  <div class="q-inner">
+    <div class="q-header">
+      <div>
+        <div class="sec-label">04 &mdash; Instrumento de Diagnóstico</div>
+        <h2 class="sec-title">Roteiro de<br><em>Avaliação NR-1</em></h2>
+      </div>
+      <p class="q-intro">Cobertura dos seis eixos de fatores psicossociais previstos no Guia de Informações sobre Fatores de Risco Psicossociais (MTE, 2025), aplicados como parte da AEP — não como instrumento isolado. A metodologia é definida pela Trapp de acordo com a realidade de cada cliente.</p>
+    </div>
+
+    <div class="q-warning">
+      <strong>Importante (MTE Q&amp;A, Pergunta 8):</strong> O uso de questionários não é obrigatório. A NR-1 permite métodos qualitativos, participativos, observação e entrevistas. O MTE não exige ferramenta específica — exige consistência técnica e integração dos resultados ao GRO. A Trapp define a metodologia mais adequada a cada cliente.
+    </div>
+
+    <div class="q-groups">
+      <div class="q-group">
+        <div class="q-group-title">⚡ Demandas do Trabalho</div>
+        <ul class="q-list">
+          <li>A quantidade de trabalho é excessiva com frequência?</li>
+          <li>É comum trabalhar fora do horário para cumprir prazos?</li>
+          <li>O trabalho exige atenção constante e concentração intensa?</li>
+          <li>Há lida frequente com situações emocionalmente desgastantes?</li>
+          <li>Existe pressão constante por resultados ou metas?</li>
+        </ul>
+      </div>
+      <div class="q-group">
+        <div class="q-group-title">🎛️ Controle e Autonomia</div>
+        <ul class="q-list">
+          <li>O trabalhador pode decidir como organizar seu trabalho?</li>
+          <li>Há possibilidade de pausas quando necessário?</li>
+          <li>Participa das decisões que afetam sua função?</li>
+          <li>Pode usar habilidades e criatividade no trabalho?</li>
+          <li>Tem controle sobre seu ritmo de trabalho?</li>
+        </ul>
+      </div>
+      <div class="q-group">
+        <div class="q-group-title">🤝 Suporte Social</div>
+        <ul class="q-list">
+          <li>O gestor apoia quando há dificuldades no trabalho?</li>
+          <li>Colegas ajudam quando algo é difícil?</li>
+          <li>Há feedback regular sobre desempenho?</li>
+          <li>Existe comunicação transparente da liderança?</li>
+          <li>O trabalhador é tratado com respeito?</li>
+        </ul>
+      </div>
+      <div class="q-group">
+        <div class="q-group-title">🔄 Função e Mudanças</div>
+        <ul class="q-list">
+          <li>Atribuições e responsabilidades são claras?</li>
+          <li>Há conflito entre o trabalho e valores pessoais?</li>
+          <li>Mudanças são comunicadas antecipadamente?</li>
+          <li>O trabalhador se sente seguro em relação ao emprego?</li>
+          <li>Já ocorreu assédio moral ou sexual no setor?</li>
+        </ul>
+      </div>
+      <div class="q-group">
+        <div class="q-group-title">🧠 Saúde e Bem-estar</div>
+        <ul class="q-list">
+          <li>Há frequente esgotamento ao final do expediente?</li>
+          <li>Dificuldade de desligar do trabalho no descanso?</li>
+          <li>Sintomas físicos associados ao estresse (insônia, dores)?</li>
+          <li>Já ocorreram afastamentos por saúde mental no setor?</li>
+        </ul>
+      </div>
+      <div class="q-group">
+        <div class="q-group-title">🏢 Organização e Ambiente</div>
+        <ul class="q-list">
+          <li>O ambiente físico de trabalho é adequado e seguro?</li>
+          <li>Há ruído, temperatura ou ergonomia inadequados?</li>
+          <li>Existe política de prevenção de violência no trabalho?</li>
+          <li>A empresa oferece canais de escuta e denúncia?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FISCALIZAÇÃO -->
+<section class="section fade-up" id="fiscalizacao">
+  <div class="sec-label">05 &mdash; O que a fiscalização cobra</div>
+  <h2 class="sec-title">Como a <em>Fiscalização</em> Atua</h2>
+
+  <div class="info-box" style="margin-bottom:2rem;">
+    <div class="info-box-label">Fonte &middot; MTE Q&amp;A Oficial — Perguntas 14, 15, 16 e 22</div>
+    <p>A fiscalização não impõe ferramenta específica. Avalia a <strong>coerência técnica</strong> entre metodologia adotada, critérios definidos, realidade das atividades, perigos identificados, medidas implementadas e efetividade do GRO. Combina análise documental com verificação in loco, entrevistas e escuta de trabalhadores.</p>
+  </div>
+
+  <div class="fisc-grid">
+    <div class="fisc-card dark">
+      <div class="fisc-icon">🔎</div>
+      <div class="fisc-title">O que o auditor analisa</div>
+      <div class="fisc-desc">Inventário de riscos, AEP, plano de ação, critérios do GRO, registros de acompanhamento e revisão, evidências de participação dos trabalhadores e condições reais de trabalho verificadas in loco.</div>
+      <div class="fisc-source">MTE Q&amp;A · Perguntas 16 e 22</div>
+    </div>
+    <div class="fisc-card">
+      <div class="fisc-icon">✅</div>
+      <div class="fisc-title">O que a empresa precisa demonstrar</div>
+      <div class="fisc-desc">Coerência entre metodologia adotada, critérios definidos, realidade das atividades, perigos identificados, riscos avaliados, medidas de prevenção implementadas e processo de acompanhamento.</div>
+      <div class="fisc-source">MTE Q&amp;A · Pergunta 22</div>
+    </div>
+    <div class="fisc-card">
+      <div class="fisc-icon">📅</div>
+      <div class="fisc-title">Período orientativo: 90 dias</div>
+      <div class="fisc-desc">Após 26/05/2026, os primeiros 90 dias têm caráter orientativo (dupla visita). Não é dispensa de adequação — é prazo para estruturar os processos. Após esse período: autuação possível com base no art. 201 da CLT.</div>
+      <div class="fisc-source">MTE Q&amp;A · Pergunta 20</div>
+    </div>
+    <div class="fisc-card">
+      <div class="fisc-icon">⛔</div>
+      <div class="fisc-title">O que NÃO é suficiente isoladamente</div>
+      <div class="fisc-desc">Apenas aplicar questionários sem integração à AEP. Apenas avaliação médica periódica. Ter somente documentos formais sem coerência com a realidade concreta das condições de trabalho.</div>
+      <div class="fisc-source">MTE Q&amp;A · Perguntas 6 e 10</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROGRAMAS -->
+<section class="section fade-up">
+  <div class="sec-label">06 &mdash; Soluções Oferecidas</div>
+  <h2 class="sec-title">Programas <em>Corretivos</em></h2>
+  <div class="prog-grid">
+    <div class="prog-card"><div class="prog-icon">🧘</div><div class="prog-title">Programa de Saúde Mental</div><div class="prog-desc">Canal de escuta, rodas de conversa, acesso a psicólogo (EAP) e campanhas sobre burnout e ansiedade. Medida de eliminação ou controle do risco identificado no inventário.</div><span class="prog-tag">Risco Alto · Burnout</span></div>
+    <div class="prog-card"><div class="prog-icon">📋</div><div class="prog-title">Política Anti-Assédio</div><div class="prog-desc">Elaboração de política interna, canal de denúncia, treinamento de lideranças e comitê de apuração. Documentada e integrada ao plano de ação do GRO.</div><span class="prog-tag">Risco Alto · Assédio</span></div>
+    <div class="prog-card"><div class="prog-icon">⏱️</div><div class="prog-title">Gestão de Jornada e Pausas</div><div class="prog-desc">Revisão de escalas, banco de horas, intervalos obrigatórios e reestruturação de metas. Atacando diretamente os fatores de risco de sobrecarga e demandas excessivas identificados no GRO.</div><span class="prog-tag">Risco Médio · Sobrecarga</span></div>
+    <div class="prog-card"><div class="prog-icon">🎓</div><div class="prog-title">Treinamento de Lideranças</div><div class="prog-desc">Capacitação em comunicação não-violenta, gestão emocional e feedback construtivo. Fortalece o suporte social — eixo crítico avaliado no diagnóstico psicossocial.</div><span class="prog-tag">Risco Médio · Suporte</span></div>
+    <div class="prog-card"><div class="prog-icon">🔊</div><div class="prog-title">Comunicação Organizacional</div><div class="prog-desc">Canais de escuta ativa, pesquisa de clima e comunicação transparente de mudanças. Serve também como evidência de participação dos trabalhadores exigida pelo MTE.</div><span class="prog-tag">Risco Médio · Comunicação</span></div>
+    <div class="prog-card"><div class="prog-icon">🏋️</div><div class="prog-title">Qualidade de Vida no Trabalho</div><div class="prog-desc">Ginástica laboral, ergonomia, pausas ativas e prevenção de doenças ocupacionais. Integrado ao GRO como medida de controle documentada no plano de ação.</div><span class="prog-tag">Risco Baixo · Bem-estar</span></div>
+    <div class="prog-card"><div class="prog-icon">📊</div><div class="prog-title">Indicadores de Monitoramento</div><div class="prog-desc">KPIs de SST: absenteísmo, afastamentos e turnover. Essenciais para demonstrar eficácia das ações ao auditor fiscal e subsidiar a revisão bienal obrigatória do inventário.</div><span class="prog-tag">Todos os níveis</span></div>
+    <div class="prog-card"><div class="prog-icon">⚖️</div><div class="prog-title">Adequação Legal e eSocial</div><div class="prog-desc">Atualização do PCMSO, PGR e GRO. Vinculação ao eSocial e preparação completa da documentação obrigatória para fiscalização do Ministério do Trabalho.</div><span class="prog-tag">Compliance · MTE</span></div>
+    <div class="prog-card"><div class="prog-icon">🔁</div><div class="prog-title">Revisão Bienal do GRO</div><div class="prog-desc">Reavaliação mínima a cada 2 anos conforme NR-1, subitem 1.5.4.4.6. Ou antes quando houver mudanças relevantes nas condições de trabalho ou quadro de pessoal.</div><span class="prog-tag">Revisão Obrigatória</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODELO COMERCIAL -->
+<section class="section fade-up">
+  <div class="sec-label">07 &mdash; Precificação</div>
+  <h2 class="sec-title">Modelo <em>Comercial</em></h2>
+  <div class="com-grid">
+    <div class="com-card">
+      <div class="com-name">Plano Essencial</div>
+      <div class="com-price">Sob<br>Consulta</div>
+      <div class="com-price-label">até 20 colaboradores</div>
+      <ul class="com-items">
+        <li>AEP (Avaliação Ergonômica Preliminar)</li>
+        <li>Inventário de riscos psicossociais</li>
+        <li>Critérios do GRO formalizados</li>
+        <li>Plano de ação básico (5W2H)</li>
+        <li>Evidências de participação documentadas</li>
+        <li>Entrega em até 15 dias úteis</li>
+      </ul>
+    </div>
+    <div class="com-card featured">
+      <div class="com-featured-badge">Mais contratado</div>
+      <div class="com-name">Plano Completo</div>
+      <div class="com-price">Sob<br>Consulta</div>
+      <div class="com-price-label">20 a 100 colaboradores</div>
+      <ul class="com-items">
+        <li>Tudo do plano Essencial</li>
+        <li>Observação in loco das atividades</li>
+        <li>Entrevistas e diagnóstico por setor</li>
+        <li>Implantação de 2 programas corretivos</li>
+        <li>Treinamento de lideranças</li>
+        <li>Suporte técnico por 3 meses</li>
+        <li>Documentação completa para eSocial</li>
+      </ul>
+    </div>
+    <div class="com-card">
+      <div class="com-name">Plano Estratégico</div>
+      <div class="com-price">Sob<br>Consulta</div>
+      <div class="com-price-label">acima de 100 colaboradores</div>
+      <ul class="com-items">
+        <li>Tudo do plano Completo</li>
+        <li>Diagnóstico por setor, turno e regime</li>
+        <li>Implantação de todos os programas</li>
+        <li>Revisão bienal obrigatória incluída</li>
+        <li>Relatórios de evolução para diretoria</li>
+        <li>Suporte técnico por 12 meses</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DIFERENCIAIS -->
+<section class="section fade-up">
+  <div class="sec-label">08 &mdash; Por que a Trapp Consultoria</div>
+  <h2 class="sec-title">Nossos <em>Diferenciais</em></h2>
+  <div class="diff-grid">
+    <div>
+      <div class="diff-headline">O que nos<br>separa<br><em>do resto</em></div>
+      <p class="diff-sub">Enquanto a maioria entrega questionários e documentos genéricos, a Trapp Consultoria entrega processo técnico completo, com coerência metodológica real e documentação que resiste à fiscalização do Auditor Fiscal do Trabalho.</p>
+    </div>
+    <div class="diff-items">
+      <div class="diff-item">
+        <div class="diff-item-title">Processo técnico completo — não só questionário</div>
+        <div class="diff-item-desc">O MTE é claro: questionário isolado não comprova gestão. Entregamos AEP + Inventário + Plano integrados, com coerência técnica que resiste à fiscalização.</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-item-title">Preparação real para o Auditor Fiscal do Trabalho</div>
+        <div class="diff-item-desc">A fiscalização cobra coerência entre metodologia, critérios, realidade das atividades e medidas implementadas. Preparamos a empresa para demonstrar isso — na documentação e in loco.</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-item-title">Cobertura de todos os regimes de trabalho</div>
+        <div class="diff-item-desc">Presencial, remoto, híbrido e teletrabalho — todos abrangidos pela nova NR-1. Adaptamos a metodologia de diagnóstico a cada realidade operacional do cliente.</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-item-title">Metodologia baseada em evidência — não em modelos genéricos</div>
+        <div class="diff-item-desc">Instrumentos derivados dos modelos COPSOQ e HSE, validados internacionalmente e adaptados à nova NR-1 e ao Guia de Riscos Psicossociais do MTE (2025).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Trapp <span>Consultoria</span></div>
+      <div class="footer-tagline">Gestão de Riscos Ocupacionais &middot; Saúde Ocupacional &middot; NR-1</div>
+    </div>
+    <div class="footer-right">
+      <p>
+        Trapp Consultoria NR-1<br>
+        GRO &middot; PGR &middot; Riscos Psicossociais<br>
+        Vigência: 26/05/2026 &middot; Dupla visita: 90 dias<br>
+        Portaria MTE n.&ordm; 1.419/2024
+      </p>
+      <div class="footer-gold-line"></div>
+    </div>
+  </div>
+  <div class="footer-source">
+    Base técnica: MTE — Perguntas e Respostas sobre o Capítulo 1.5 da NR-1 &middot; 1ª Rodada (30/04/2026) &middot; CGNOR/DSST/SIT &middot; 22 perguntas e respostas oficiais
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
