@@ -199,6 +199,7 @@ textarea:focus{border-color:var(--navy)}
   .nota-opt label{font-size:0.75rem;padding:0.35rem 0.05rem}
   .access-card,.expired-card{padding:2rem 1.5rem}
 }
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 </head>
 <body>
@@ -399,7 +400,13 @@ textarea:focus{border-color:var(--navy)}
     <div class="success-icon">✅</div>
     <div class="success-title">Respostas enviadas!</div>
     <p class="success-sub">Obrigado pela participação. Suas respostas foram registradas de forma anônima e serão analisadas pela equipe da Trapp Consultoria.</p>
-    <div><button class="btn-dl" onclick="downloadMyCSV()">⬇ Baixar minha resposta</button><button class="btn-novo" onclick="resetForm()">Nova resposta</button></div>
+    <div style="background:#e8f5ee;border:1px solid #b8dfc8;border-radius:3px;padding:1rem 1.5rem;margin-bottom:1.5rem;font-size:0.88rem;color:#1a6b45;font-weight:500;">
+      ✅ Suas respostas foram enviadas automaticamente para o sistema da Trapp Consultoria.
+    </div>
+    <div>
+      <button class="btn-dl" onclick="downloadMyCSV()">⬇ Baixar cópia (CSV)</button>
+      <button class="btn-novo" onclick="resetForm()">Nova resposta</button>
+    </div>
   </div>
   <div class="all-resp-box">
     <div class="all-resp-label">📊 Respostas desta sessão</div>
@@ -412,6 +419,14 @@ textarea:focus{border-color:var(--navy)}
 </div><!-- /screen-form -->
 
 <script>
+// Iframe oculto para envio de dados (evita erro de CORS)
+(function(){
+  const iframe = document.createElement('iframe');
+  iframe.name = 'trapp_iframe';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+})();
+
 
 // ADMIN PASSWORD (altere aqui)
 const ADMIN_PASSWORD = 'TRAPP2026';
@@ -651,7 +666,58 @@ function showStep(n){
   if(n===8)renderSimNao();
   if(n===10)renderNotas();
 }
-function goNext(){if(currentStep<11)showStep(currentStep+1);}
+function validateStep(n) {
+  // Eixos Likert B1-B44 (steps 2-7)
+  const eixoMap = {
+    2: Object.keys(PERGUNTAS).length > 0 ? Object.keys(PERGUNTAS.eixo1).map((_,i)=>'B'+(i+1)) : [],
+    3: ['B10','B11','B12','B13','B14','B15'],
+    4: ['B16','B17','B18','B19','B20','B21','B22','B23'],
+    5: ['B24','B25','B26','B27','B28','B29','B30'],
+    6: ['B31','B32','B33','B34','B35','B36','B37'],
+    7: ['B38','B39','B40','B41','B42','B43','B44'],
+    8: ['C1','C2','C3','C4','C5','C6'],
+  };
+  if(eixoMap[n]) {
+    const codes = eixoMap[n];
+    const missing = codes.filter(code => !document.querySelector('input[name="'+code+'"]:checked'));
+    if(missing.length > 0) {
+      showValidationError('Por favor, responda todas as perguntas antes de continuar. Faltam ' + missing.length + ' resposta(s).');
+      // Scroll para primeira pergunta sem resposta
+      const first = document.querySelector('input[name="'+missing[0]+'"]');
+      if(first) first.closest('.likert-item,.simnao-item') && first.closest('.likert-item,.simnao-item').scrollIntoView({behavior:'smooth', block:'center'});
+      return false;
+    }
+  }
+  // Step 10 (notas D1-D7)
+  if(n === 10) {
+    const notaCodes = ['D1','D2','D3','D4','D5','D6','D7'];
+    const missing = notaCodes.filter(code => !document.querySelector('input[name="'+code+'"]:checked'));
+    if(missing.length > 0) {
+      showValidationError('Por favor, dê uma nota para todos os itens antes de enviar. Faltam ' + missing.length + ' nota(s).');
+      return false;
+    }
+  }
+  return true;
+}
+
+function showValidationError(msg) {
+  let box = document.getElementById('validationError');
+  if(!box) {
+    box = document.createElement('div');
+    box.id = 'validationError';
+    box.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#b83232;color:#fff;padding:0.8rem 1.5rem;border-radius:4px;font-size:0.85rem;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,0.25);max-width:90vw;text-align:center;animation:fadeIn 0.2s ease';
+    document.body.appendChild(box);
+  }
+  box.textContent = msg;
+  box.style.display = 'block';
+  clearTimeout(box._timer);
+  box._timer = setTimeout(() => { box.style.display = 'none'; }, 4000);
+}
+
+function goNext(){
+  if(!validateStep(currentStep)) return;
+  if(currentStep < 11) showStep(currentStep+1);
+}
 function goBack(){if(currentStep>0)showStep(currentStep-1);}
 
 function collectData(){
@@ -672,23 +738,49 @@ function collectData(){
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyIhRXbnKN_M25yXcdlyjhVOyC_BC5vPZ9wdKaiU2BGL283X9aI-RjfeE03NjZpRbFD/exec';
 
 function sendToSheets(data) {
+  // Usa form POST via iframe oculto — funciona com no-cors sem erro de CORS
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SHEETS_URL;
+  form.target = 'trapp_iframe';
+  form.style.display = 'none';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'payload';
+  input.value = JSON.stringify(data);
+  form.appendChild(input);
+
+  // Também envia via fetch com no-cors como fallback
   fetch(SHEETS_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
-  })
-  .then(() => console.log('Enviado para Google Sheets OK'))
-  .catch(err => console.warn('Erro ao enviar para Sheets:', err));
+  }).catch(() => {});
+
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(() => document.body.removeChild(form), 3000);
+  console.log('Dados enviados para Google Sheets');
 }
 
 function submitForm(){
-  const data=collectData();
+  // Confirmação antes de enviar
+  if(!confirm('Tem certeza que deseja enviar suas respostas? Depois de enviado nao sera possivel alterar.')) return;
+
+  const data = collectData();
   allResponses.push(data);
-  // Envia para Google Sheets automaticamente
+
+  // Envia automaticamente para Google Sheets
   sendToSheets(data);
+
   // Atualiza contador local
-  if(currentCodeData){const codes=loadCodes();const i=codes.findIndex(c=>c.code===currentCodeData.code);if(i>=0){codes[i].responses=(codes[i].responses||0)+1;saveCodes(codes);}}
+  if(currentCodeData){
+    const codes = loadCodes();
+    const i = codes.findIndex(c => c.code === currentCodeData.code);
+    if(i >= 0){ codes[i].responses = (codes[i].responses||0) + 1; saveCodes(codes); }
+  }
+
   renderAllResponsesTable();
   showStep(11);
 }
